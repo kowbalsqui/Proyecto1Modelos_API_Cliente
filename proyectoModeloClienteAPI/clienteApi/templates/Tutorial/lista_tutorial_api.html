@@ -1,0 +1,22 @@
+{% extends "Padre.html" %}
+{% block contenido %}
+
+<h1 class="display-3">Lista de Tutoriales</h1>
+
+    <div class="row">
+        {% for tutorial in tutoriales_mostrar %}
+            <div class="col-sm-4 mb-2">
+
+                <p>Titulo: {{ tutorial.titulo }}</p>
+                <p>Contenido: {{ tutorial.contenido }}</p>
+                <p>Fecha de Creacion: {{ tutorial.fecha_Creacion }}</p>
+                <p>Visitas: {{ tutorial.visitas }}</p>
+                <p>Valoracion: {{ tutorial.valoracion }}</p>
+                <p>Usuario: {{ usuario.nombre }}</p>
+            
+            </div>
+        {% empty %}
+            <h1>lo sentimos mucho, no hay tutoriales </h1>
+        {% endfor %}
+    </div>
+{% endblock %}
