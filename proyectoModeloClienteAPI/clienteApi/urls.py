@@ -5,5 +5,6 @@ from django.contrib.auth.views import LoginView, LogoutView
 urlpatterns = [
     path('', views.inicio, name= 'inicio'),
     path('Tutorial/lista_tutorial_api.html', views.tutorial_lista_api, name = 'listar_tutoriales_api'),
+    path('Usuario/lista_usuario-api_html', views.usuario_lista_api, name = 'listar_usuarios_api'),
     path('enlaces/', views.pagina_de_enlaces, name='pagina_de_enlaces'),
 ]
