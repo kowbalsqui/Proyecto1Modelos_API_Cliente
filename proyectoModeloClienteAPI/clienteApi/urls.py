@@ -4,7 +4,10 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
     path('', views.inicio, name= 'inicio'),
-    path('Tutorial/lista_tutorial_api.html', views.tutorial_lista_api, name = 'listar_tutoriales_api'),
+    path('Tutorial/lista_tutorial_api.html', views.tutorial_lista_apiProfesor, name = 'listar_tutoriales_api'),
+    path('Tutorial/lista_tutorial_api.html', views.tutorial_lista_apiAdmin, name = 'listar_tutoriales_apiAdmin'),
+    path('Tutorial/lista_tutorial_api.html', views.tutorial_lista_apiEstudiante, name = 'listar_tutoriales_apiEstudiante'),
     path('Usuario/lista_usuario-api_html', views.usuario_lista_api, name = 'listar_usuarios_api'),
+    path('Cursos/lista_cursos_api.html', views.cursos_lista_api, name = 'lista_cursos_api'),
     path('enlaces/', views.pagina_de_enlaces, name='pagina_de_enlaces'),
 ]
