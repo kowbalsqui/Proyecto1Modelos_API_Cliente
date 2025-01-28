@@ -38,18 +38,17 @@ def tutorial_lista_apiAdmin(request):
         "tutoriales_mostrar": tutoriales
     })
     
-<<<<<<< HEAD
 def usuario_lista_api (request):
     #Le damos el permiso de autorizacion
     headers = {'Authorization': 'Bearer G8S54YVURkTo8oS9fp7VF9fVnYQpnU'}
     #Obtenemos todos los usuarios de la api
     response = requests.get('http://127.0.0.1:8000/api/v1/usuario', headers= headers)
     #Transformamos las repuesta
-=======
+
 def tutorial_lista_apiEstudiante(request):
     # Le damos permiso de autorizacion
     estudiante = os.getenv('STUDENT_USER')
-    headers_Estudiante = {'Authorization' : f'Bearer{estudiante}'}
+    headers_Estudiante = {'Authorization' : f'Bearer {estudiante}'}
     # Obtenemos todos los tutoriales de la api primero
     response = requests.get('http://127.0.0.1:8000/api/v1/tutorial', headers=headers_Estudiante)
     # Transformamos la respuesta en JSON
@@ -65,7 +64,6 @@ def usuario_lista_api(request):
     # Obtenemos todos los usuarios de la api
     response = requests.get('http://127.0.0.1:8000/api/v1/usuario', headers=headers_Profesor)
     # Transformamos la respuesta en JSON
->>>>>>> b2dd90b870ddde5bcb1237e04dd1d56f38a7986e
     usuarios = response.json()
     return render(request, 'Usuario/lista_usuario_api.html', {
         'usuarios_mostrar': usuarios
@@ -74,9 +72,18 @@ def usuario_lista_api(request):
 def cursos_lista_api(request):
     profesor = os.getenv('TEACHER_USER')
     headers = {'Authorization': f'Bearer {profesor}'}
-    response = requests.get('http://127.0.0.1:8000/api/v1/usuario', headers=headers)
+    response = requests.get('http://127.0.0.1:8000/api/v1/cursos', headers=headers)
     cursos = response.json()
     return render(request, 'Cursos/lista_cursos_api.html', {
-        'cursos_mostrar', cursos
+        'cursos_mostrar': cursos
+    })
+
+def categoria_lista_api(request):
+    profesor = os.getenv('TEACHER_USER')
+    headers = {'Authorization': f'Bearer {profesor}'}
+    response = requests.get('http://127.0.0.1:8000/api/v1/categoria', headers=headers)
+    categorias = response.json()
+    return render(request, 'Categorias/lista_categorias_api.html', {
+        'categorias_mostrar': categorias
     })
     

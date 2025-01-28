@@ -1,0 +1,17 @@
+{% extends "Padre.html" %}
+{% block contenido %}
+<h1 class="display-3">Lista de Categorias</h1>
+<div class="row">
+    {% for categoria in categorias_mostrar %}
+    <div class="col-sm-4 mb-2">
+        <p>Nombre: {{ categoria.nombre }}</p>
+        <p>Es activa?: {{ categoria.es_activa }}</p>
+        <p>Popularidad: {{ categoria.popularidad }}</p>
+        <p>Descripcion: {{ categoria.descripcion }}</p>
+        <p>Tutorial: {{ categoria.tutorial.titulo }}</p>
+    </div>
+    {% empty %}
+    <h1>Lo sentimos mucho, no hay cursos</h1>
+    {% endfor %}
+</div>
+{% endblock %}
