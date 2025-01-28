@@ -24,7 +24,7 @@ def usuario_lista_api (request):
     #Le damos el permiso de autorizacion
     headers = {'Authorization': 'Bearer G8S54YVURkTo8oS9fp7VF9fVnYQpnU'}
     #Obtenemos todos los usuarios de la api
-    response = request.get('http://127.0.0.1:8000/api/v1/usuario', headers= headers)
+    response = requests.get('http://127.0.0.1:8000/api/v1/usuario', headers= headers)
     #Transformamos las repuesta
     usuarios = response.json()
     return render(request, 'Usuario/lista_usuario_api.html', {
