@@ -11,5 +11,6 @@ urlpatterns = [
     path('Usuario/lista_usuario_api_html', views.usuario_lista_api, name = 'listar_usuarios_api'),
     path('Categoria/lista_categoria_api_html', views.categoria_lista_api, name = 'listar_categoria_api'),
     path('Cursos/lista_cursos_api.html', views.cursos_lista_api, name = 'lista_cursos_api'),
+    path('Etiquetas/lista_etiquetas_api.html', views.etiquetas_lista_api, name = 'lista_etiquetas_api'),
     path('enlaces/', views.pagina_de_enlaces, name='pagina_de_enlaces'),
 ]

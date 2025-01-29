@@ -86,4 +86,13 @@ def categoria_lista_api(request):
     return render(request, 'Categorias/lista_categorias_api.html', {
         'categorias_mostrar': categorias
     })
+
+def etiquetas_lista_api(request):
+    profesor = os.getenv('TEACHER_USER')
+    headers = {'Authorization': f'Bearer {profesor}'}
+    response = requests.get('http://127.0.0.1:8000/api/v1/etiqueta', headers=headers)
+    etiquetas = response.json()
+    return render(request, 'Etiquetas/lista_etiquetas_api.html', {
+        'etiquetas_mostrar': etiquetas
+    })
     

@@ -1,0 +1,17 @@
+{% extends "Padre.html" %}
+{% block contenido %}
+<h1 class="display-3">Lista de Etiquetas</h1>
+<div class="row">
+    {% for etiqueta in etiquetas_mostrar %}
+    <div class="col-sm-4 mb-2">
+        <p>Nombre: {{ etiqueta.nombre }}</p>
+        <p>Color: {{ etiqueta.color }}</p>
+        <p>publica: {{ etiqueta.publica }}</p>
+        <p>Descripcion: {{ etiqueta.descripcion }}</p>
+        <p>Tutorial: {{ etiqueta.tutorial.titulo }}</p>
+    </div>
+    {% empty %}
+    <h1>Lo sentimos mucho, no hay cursos</h1>
+    {% endfor %}
+</div>
+{% endblock %}
