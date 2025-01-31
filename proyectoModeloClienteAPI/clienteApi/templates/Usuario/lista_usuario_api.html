@@ -3,19 +3,24 @@
 
 <h1 class="display-3">Lista de Usuarios</h1>
 
-    <div class="row">
-        {% for usuario in usuarios_mostrar %}
-            <div class="col-sm-4 mb-2">
-
-                <p>Nombre: {{ usuario.nombre }}</p>
-                <p>Email: {{ usuario.email }}</p>
-                <p>Fecha de Registro: {{ usuario.fecha_Registro }}</p>
-                <p>Activo?: {{ usuario.es_activo }}</p>
-                <p>Puntuacion: {{ usuario.puntuacion }}</p>
-            
+<div class="row">
+    {% for usuario in usuarios_mostrar %}
+    <div class="col-sm-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ usuario.nombre }}</h5>
+                <p class="card-text"><strong>Email:</strong> {{ usuario.email }}</p>
+                <p class="card-text"><strong>Fecha de Registro:</strong> {{ usuario.fecha_Registro }}</p>
+                <p class="card-text"><strong>Activo?:</strong> {{ usuario.es_activo }}</p>
+                <p class="card-text"><strong>Puntuación:</strong> {{ usuario.puntuacion }}</p>
             </div>
-        {% empty %}
-            <h1>lo sentimos mucho, no hay tutoriales </h1>
-        {% endfor %}
+        </div>
     </div>
+    {% empty %}
+    <div class="col-12">
+        <h3 class="text-center">Lo sentimos mucho, no hay usuarios disponibles</h3>
+    </div>
+    {% endfor %}
+</div>
+
 {% endblock %}

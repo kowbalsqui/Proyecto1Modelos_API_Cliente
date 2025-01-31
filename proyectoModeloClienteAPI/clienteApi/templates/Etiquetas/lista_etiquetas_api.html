@@ -3,15 +3,21 @@
 <h1 class="display-3">Lista de Etiquetas</h1>
 <div class="row">
     {% for etiqueta in etiquetas_mostrar %}
-    <div class="col-sm-4 mb-2">
-        <p>Nombre: {{ etiqueta.nombre }}</p>
-        <p>Color: {{ etiqueta.color }}</p>
-        <p>publica: {{ etiqueta.publica }}</p>
-        <p>Descripcion: {{ etiqueta.descripcion }}</p>
-        <p>Tutorial: {{ etiqueta.tutorial.titulo }}</p>
+    <div class="col-sm-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ etiqueta.nombre }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Color: {{ etiqueta.color }}</h6>
+                <p class="card-text">Publica: {{ etiqueta.publica }}</p>
+                <p class="card-text">Descripción: {{ etiqueta.descripcion }}</p>
+                <p class="card-text">Tutorial: <a href="{{ etiqueta.tutorial.url }}">{{ etiqueta.tutorial.titulo }}</a></p>
+            </div>
+        </div>
     </div>
     {% empty %}
-    <h1>Lo sentimos mucho, no hay cursos</h1>
+    <div class="col-12">
+        <h3 class="text-center">Lo sentimos mucho, no hay etiquetas disponibles</h3>
+    </div>
     {% endfor %}
 </div>
 {% endblock %}

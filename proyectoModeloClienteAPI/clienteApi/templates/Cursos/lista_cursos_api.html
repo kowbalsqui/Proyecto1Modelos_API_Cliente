@@ -1,17 +1,23 @@
 {% extends "Padre.html" %}
 {% block contenido %}
-<h1 class="display-3">Lista de Cursos</h1>
+<h1 class="display-3 text-center my-4">Lista de Cursos</h1>
 <div class="row">
     {% for curso in cursos_mostrar %}
-    <div class="col-sm-4 mb-2">
-        <p>Nombre: {{ curso.nombre }}</p>
-        <p>Descripcion: {{ curso.descripcion }}</p>
-        <p>Horas de duración: {{ curso.horas }}</p>
-        <p>Precio: {{ curso.precio }}</p>
-        <p>Tutorial: {{ curso.tutorial.titulo }}</p>
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h5 class="card-title">{{ curso.nombre }}</h5>
+                <p class="card-text"><strong>Descripción:</strong> {{ curso.descripcion }}</p>
+                <p class="card-text"><strong>Horas de duración:</strong> {{ curso.horas }}</p>
+                <p class="card-text"><strong>Precio:</strong> {{ curso.precio }} €</p>
+                <p class="card-text"><strong>Tutorial:</strong> {{ curso.tutorial.titulo }}</p>
+            </div>
+        </div>
     </div>
     {% empty %}
-    <h1>Lo sentimos mucho, no hay cursos</h1>
+    <div class="col-12">
+        <h1 class="text-center text-danger">Lo sentimos, no hay cursos disponibles</h1>
+    </div>
     {% endfor %}
 </div>
 {% endblock %}

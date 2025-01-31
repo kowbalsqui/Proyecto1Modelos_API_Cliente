@@ -3,20 +3,25 @@
 
 <h1 class="display-3">Lista de Tutoriales</h1>
 
-    <div class="row">
-        {% for tutorial in tutoriales_mostrar %}
-            <div class="col-sm-4 mb-2">
-
-                <p>Titulo: {{ tutorial.titulo }}</p>
-                <p>Contenido: {{ tutorial.contenido }}</p>
-                <p>Fecha de Creacion: {{ tutorial.fecha_Creacion }}</p>
-                <p>Visitas: {{ tutorial.visitas }}</p>
-                <p>Valoracion: {{ tutorial.valoracion }}</p>
-                <p>Usuario: {{ tutorial.usuario.nombre }}</p>
-            
+<div class="row">
+    {% for tutorial in tutoriales_mostrar %}
+    <div class="col-sm-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ tutorial.titulo }}</h5>
+                <p class="card-text"><strong>Contenido:</strong> {{ tutorial.contenido }}</p>
+                <p class="card-text"><strong>Fecha de Creación:</strong> {{ tutorial.fecha_Creacion }}</p>
+                <p class="card-text"><strong>Visitas:</strong> {{ tutorial.visitas }}</p>
+                <p class="card-text"><strong>Valoración:</strong> {{ tutorial.valoracion }}</p>
+                <p class="card-text"><strong>Usuario:</strong> {{ tutorial.usuario.nombre }}</p>
             </div>
-        {% empty %}
-            <h1>lo sentimos mucho, no hay tutoriales </h1>
-        {% endfor %}
+        </div>
     </div>
+    {% empty %}
+    <div class="col-12">
+        <h3 class="text-center">Lo sentimos mucho, no hay tutoriales disponibles</h3>
+    </div>
+    {% endfor %}
+</div>
+
 {% endblock %}
