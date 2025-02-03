@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 import requests
+from django.http import HttpResponseRedirect
 from django.core import serializers
 from django.conf import settings
 import os
 from dotenv import load_dotenv
+from .forms import *
 
 # Cargar el archivo .env
 load_dotenv()
@@ -95,4 +97,24 @@ def etiquetas_lista_api(request):
     return render(request, 'Etiquetas/lista_etiquetas_api.html', {
         'etiquetas_mostrar': etiquetas
     })
+
+def crear_cabezera():
+    profesor = os.getenv('TEACHER_USER')
+    return {'Authorization': f'Bearer {profesor}'}
+
+def busqueda_usuario_simple_api(request):
+    formulario = BusquedaUsuarioForm(request.GET)
+
+    if formulario.is_valid():
+        headers = crear_cabezera()
+        response = requests.get('http://127.0.0.1:8000/api/v1/usuario', 
+                                headers=headers,
+                                params = formulario.cleaned_data)
+        usuarios = response.json()
+        return render (request, 'Usuario/busqueda_usuario_simple_api.html', { "usuarios_mostrar": usuarios})
     
+    referer = request.META.get("HTTP_REFERER")
+    if referer:
+        return HttpResponseRedirect(referer)
+    else:
+        return redirect('inicio')
