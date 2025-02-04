@@ -14,5 +14,7 @@ urlpatterns = [
     path('Etiquetas/lista_etiquetas_api.html', views.etiquetas_lista_api, name = 'lista_etiquetas_api'),
     path('enlaces/', views.pagina_de_enlaces, name='pagina_de_enlaces'),
     #URLS de los formularios de busqueda basicos
-    path('Usuario/busqueda_usuario_simple_api.html', views.busqueda_usuario_simple_api, name = 'busqueda_usuario_simple_api'),
+    path('Usuario/busqueda_usuario_simple_api', views.busqueda_usuario_simple_api, name = 'busqueda_usuario_simple_api'),
+    #URLS de los formularios de busqueda avanzados
+    path('Usuario/busqueda_usuario_avanzado_api', views.busqueda_usuario_avanzado_api, name = 'busqueda_usuario_avanzado_api'),
 ]
