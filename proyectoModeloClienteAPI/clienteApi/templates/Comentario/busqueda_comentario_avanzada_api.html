@@ -1,0 +1,62 @@
+{% extends "Padre.html" %}
+
+{% block cabecera %}
+<h1 class="text-center text-primary my-4">Búsqueda Avanzada de Comentarios</h1>
+<p class="text-center text-secondary">Filtros de búsqueda</p>
+{% endblock %}
+
+{% block contenido %}
+<div class="card shadow p-4">
+    <h2 class="text-secondary mb-4">Filtros de búsqueda</h2>
+    <form method="GET" class="mb-4">
+        {{ formulario.contenido.label_tag }}
+        {{ formulario.contenido }}
+        {% for error in formulario.contenido.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+        {% endfor %}
+    
+        {{ formulario.visible.label_tag }}
+        {{ formulario.visible }}
+        {% for error in formulario.visible.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+        {% endfor %}
+    
+        {{ formulario.puntuacion.label_tag }}
+        {{ formulario.puntuacion }}
+        {% for error in formulario.puntuacion.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+        {% endfor %}
+    
+        <button type="submit" class="btn btn-primary w-100">Buscar</button>
+    </form>
+</div>
+
+<hr>
+
+<h2 class="text-center text-secondary my-4">Resultados de búsqueda</h2>
+
+<div class="row">
+    {% for comentario in comentario_mostrar %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ comentario.fecha }}</h5>
+                <p class="card-text">
+                    <strong>Contenido:</strong> {{ comentario.contenido|truncatewords:10 }}<br>
+                    <strong>Puntuación:</strong> {{ comentario.puntuacion }}<br>
+                    <strong>Visible:</strong> {{ comentario.visible }}<br>
+                </p>
+            </div>
+            <div class="card-footer text-center">
+                {% load bootstrap_icons %}
+                <!-- Aquí puedes agregar botones o acciones adicionales -->
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <p class="text-center text-danger">No se encontraron resultados.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

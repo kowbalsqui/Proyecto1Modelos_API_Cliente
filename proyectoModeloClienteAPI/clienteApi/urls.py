@@ -17,4 +17,7 @@ urlpatterns = [
     path('Usuario/busqueda_usuario_simple_api', views.busqueda_usuario_simple_api, name = 'busqueda_usuario_simple_api'),
     #URLS de los formularios de busqueda avanzados
     path('Usuario/busqueda_usuario_avanzado_api', views.busqueda_usuario_avanzado_api, name = 'busqueda_usuario_avanzado_api'),
+    path('Tutorial/busqueda_tutorial_avanzado_api', views.busqueda_tutorial_avanzado_api, name = 'busqueda_tutorial_avanzado_api'),
+    path('Cursos/busqueda_perfil_avanzado_api', views.busqueda_perfil_avanzado_api, name = 'busqueda_perfil_avanzado_api'),
+    path('Comentario/busqueda_comentario_avanzado_api', views.busqueda_comentario_avanzado_api, name = 'busqueda_comentario_avanzado_api'),
 ]

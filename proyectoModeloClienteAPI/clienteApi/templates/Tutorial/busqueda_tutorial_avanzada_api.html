@@ -1,0 +1,65 @@
+{% extends "Padre.html" %}
+
+{% block cabecera %}
+    <h1 class="text-center text-primary my-4">Búsqueda Avanzada de Tutoriales</h1>
+    <p class="text-center text-secondary">Filtros de búsqueda</p>
+{% endblock %}
+
+{% block contenido %}
+    <div class="card shadow p-4">
+        <h2 class="text-secondary mb-4">Filtros de búsqueda</h2>
+        <form method="GET" class="mb-4">
+            {% csrf_token %}
+            {{ formulario.titulo.label_tag }}
+            {{ formulario.titulo }}
+            {% for error in formulario.titulo.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+
+            {{ formulario.visitas.label_tag }}
+            {{ formulario.visitas }}
+            {% for error in formulario.visitas.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+
+            {{ formulario.valoracion.label_tag }}
+            {{ formulario.valoracion }}
+            {% for error in formulario.valoracion.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary w-100">Buscar</button>
+        </form>
+    </div>
+
+    <hr>
+
+    <h2 class="text-center text-secondary my-4">Resultados de búsqueda</h2>
+    <div class="row">
+        {% if tutorial_mostrar %}
+            {% for tutorial in tutorial_mostrar %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ tutorial.titulo }}</h5>
+                            <p class="card-text">
+                                <strong>Contenido:</strong> {{ tutorial.contenido|truncatewords:10 }}<br>
+                                <strong>Fecha de creacion:</strong> {{ tutorial.fecha_Creacion|date:"d \d\e F \d\e Y" }}<br>
+                                <strong>Valoraciones:</strong> {{ tutorial.valoracion }}<br>
+                                <strong>Visitas:</strong> {{ tutorial.visitas }}<br>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <p class="text-center text-danger">No se encontraron resultados.</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <p class="text-center text-danger">No se encontraron resultados.</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -61,10 +61,11 @@ def tutorial_lista_apiEstudiante(request):
     })
 
 def usuario_lista_api(request):
+    profesor = os.getenv('TEACHER_USER')
     # Le damos el permiso de autorizacion
-    headers_Profesor = {'Authorization': 'Bearer OGIxoAZTgOaPKtk0zU3O5Kt929il3l'}
+    headers_Profesor = {'Authorization': f'Bearer {profesor}'}
     # Obtenemos todos los usuarios de la api
-    response = requests.get('http://127.0.0.1:8000/api/v1/usuario', headers=headers_Profesor)
+    response = requests.get('http://127.0.0.1:8092/api/v1/usuario', headers=headers_Profesor)
     # Transformamos la respuesta en JSON
     usuarios = response.json()
     return render(request, 'Usuario/lista_usuario_api.html', {
@@ -101,16 +102,17 @@ def etiquetas_lista_api(request):
 # Vista de los formularios de busqueda basicos
 
 def crear_cabezera():
-    return {'Authorization': 'Bearer OGIxoAZTgOaPKtk0zU3O5Kt929il3l'}
+    return {'Authorization': 'Bearer FZ6oExxJOhtg5cHiiTrbRFPOuL3jh8'}
 
 def busqueda_usuario_simple_api(request):
+    profesor = os.getenv('TEACHER_USER')
     if len(request.GET) > 0:
         print("Datos recibidos en request.GET:", request.GET)  # Depuración
         formulario = BusquedaUsuarioForm(request.GET)
 
         if formulario.is_valid():
-            headers = {'Authorization': 'Bearer OGIxoAZTgOaPKtk0zU3O5Kt929il3l'}
-            response = requests.get('http://127.0.0.1:8000/api/v1/usuario', 
+            headers = {'Authorization': f'Bearer {profesor}'}
+            response = requests.get('http://127.0.0.1:8092/api/v1/usuario', 
                                     headers=headers,
                                     params=formulario.cleaned_data)
             usuarios = response.json()
@@ -129,17 +131,18 @@ def busqueda_usuario_simple_api(request):
 # Vista de los formularios de busqueda avanzados
 
 def busqueda_usuario_avanzado_api(request):
+    profesor = os.getenv('TEACHER_USER')
     if len(request.GET) > 0:
         print("Datos recibidos en request.GET:", request.GET)  # Depuración
         formulario = BusquedaUsuarioAvanzadoForm(request.GET)
         
         if formulario.is_valid():
             try:
-                headers = {'Authorization': 'Bearer OGIxoAZTgOaPKtk0zU3O5Kt929il3l'}
+                headers = {'Authorization': f'Bearer {profesor}'}
                 print("Datos enviados en params:", formulario.cleaned_data)  # Depuración
                 
                 response = requests.get(
-                    'http://127.0.0.1:8000/api/v1/usuario', 
+                    'http://127.0.0.1:8092/api/v1/usuario/busqueda_avanzada_usuario', 
                     headers=headers,
                     params=formulario.cleaned_data
                 )
@@ -169,9 +172,138 @@ def busqueda_usuario_avanzado_api(request):
         formulario = BusquedaUsuarioAvanzadoForm(None)
 
     return render(request, 'Usuario/busqueda_usuario_avanzada_api.html', {"formulario": formulario})
+
+def busqueda_tutorial_avanzado_api(request):
+    profesor = os.getenv('TEACHER_USER')
+    if len(request.GET) > 0:
+        print("Datos recibidos en request.GET:", request.GET)  # Depuración
+        formulario = BusquedaTutorialAvanzadoForm(request.GET)
+        
+        if formulario.is_valid():
+            try:
+                headers = {'Authorization': f'Bearer {profesor}'}
+                print("Datos enviados en params:", formulario.cleaned_data)  # Depuración
+                
+                response = requests.get(
+                    'http://127.0.0.1:8092/api/v1/tutorial/busqueda_avanzada_tutorial', 
+                    headers=headers,
+                    params=formulario.cleaned_data
+                )
+
+                if (response.status_code == requests.codes.ok):
+                    tutorial = response.json()
+                    return render(request, 'Tutorial/busqueda_tutorial_avanzada_api.html', {"tutorial_mostrar": tutorial})
+                else:
+                    print("Error de estado:", response.status_code)
+                    response.raise_for_status()
+
+            except HTTPError as http_err:
+                print(f'Hubo un error en la petición: {http_err}')
+                if response.status_code == 400:
+                    errores = response.json()
+                    for error in errores:
+                        formulario.add_error(error, errores[error])
+                    return render(request, 'Tutorial/busqueda_tutorial_avanzada_api.html', {"formulario": formulario, "errores": errores})
+                else:
+                    return mi_error_500(request)
+            except Exception as err:
+                print(f'Ocurrió un error: {err}')
+                return mi_error_500(request)
+        else:
+            print("Errores del formulario:", formulario.errors)  # Depuración
+    else:
+        formulario = BusquedaTutorialAvanzadoForm(None)
+
+    return render(request, 'Tutorial/busqueda_tutorial_avanzada_api.html', {"formulario": formulario})
    
-   
+def busqueda_perfil_avanzado_api(request):
+    profesor = os.getenv('TEACHER_USER')
+    if len(request.GET) > 0:
+        print("Datos recibidos en request.GET:", request.GET)  # Depuración
+        formulario = BusquedaPerfilAvanzadoForm(request.GET)
+        
+        if formulario.is_valid():
+            try:
+                headers = {'Authorization': f'Bearer {profesor}'}
+                print("Datos enviados en params:", formulario.cleaned_data)  # Depuración
+                
+                response = requests.get(
+                    'http://127.0.0.1:8092/api/v1/perfil/busqueda_avanzda_perfil', 
+                    headers=headers,
+                    params=formulario.cleaned_data
+                )
+
+                if (response.status_code == requests.codes.ok):
+                    perfil = response.json()
+                    return render(request, 'Perfil/busqueda_perfil_avanzada_api.html', {"perfil_mostrar": perfil})
+                else:
+                    print("Error de estado:", response.status_code)
+                    response.raise_for_status()
+
+            except HTTPError as http_err:
+                print(f'Hubo un error en la petición: {http_err}')
+                if response.status_code == 400:
+                    errores = response.json()
+                    for error in errores:
+                        formulario.add_error(error, errores[error])
+                    return render(request, 'Perfil/busqueda_perfil_avanzada_api.html', {"formulario": formulario, "errores": errores})
+                else:
+                    return mi_error_500(request)
+            except Exception as err:
+                print(f'Ocurrió un error: {err}')
+                return mi_error_500(request)
+        else:
+            print("Errores del formulario:", formulario.errors)  # Depuración
+    else:
+        formulario = BusquedaPerfilAvanzadoForm(None)
+
+    return render(request, 'Perfil/busqueda_perfil_avanzada_api.html', {"formulario": formulario})
+
+def busqueda_comentario_avanzado_api(request):
+    profesor = os.getenv('TEACHER_USER')
+    if len(request.GET) > 0:
+        print("Datos recibidos en request.GET:", request.GET)  # Depuración
+        formulario = BusquedaComentarioAvanzadoForm(request.GET)
+        
+        if formulario.is_valid():
+            try:
+                headers = {'Authorization': f'Bearer {profesor}'}
+                print("Datos enviados en params:", formulario.cleaned_data)  # Depuración
+                
+                response = requests.get(
+                    'http://127.0.0.1:8092/api/v1/comentario/busqueda_avanzada_comentario', 
+                    headers=headers,
+                    params=formulario.cleaned_data
+                )
+
+                if (response.status_code == requests.codes.ok):
+                    perfil = response.json()
+                    return render(request, 'Comentario/busqueda_comentario_avanzada_api.html', {"comentario_mostrar": perfil})
+                else:
+                    print("Error de estado:", response.status_code)
+                    response.raise_for_status()
+
+            except HTTPError as http_err:
+                print(f'Hubo un error en la petición: {http_err}')
+                if response.status_code == 400:
+                    errores = response.json()
+                    for error in errores:
+                        formulario.add_error(error, errores[error])
+                    return render(request, 'Comentario/busqueda_comentario_avanzada_api.html', {"formulario": formulario, "errores": errores})
+                else:
+                    return mi_error_500(request)
+            except Exception as err:
+                print(f'Ocurrió un error: {err}')
+                return mi_error_500(request)
+        else:
+            print("Errores del formulario:", formulario.errors)  # Depuración
+    else:
+        formulario = BusquedaComentarioAvanzadoForm(None)
+
+    return render(request, 'Comentario/busqueda_comentario_avanzada_api.html', {"formulario": formulario})
+
    #Errores
    
 def mi_error_500(request,exception=None):
     return render(request, 'errores/500.html',None,None,500)
+
