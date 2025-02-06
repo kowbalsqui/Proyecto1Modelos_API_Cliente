@@ -130,8 +130,16 @@ def busqueda_usuario_simple_api(request):
 
 # Vista de los formularios de busqueda avanzados
 
+import os
+import requests
+from requests.exceptions import HTTPError
+from django.shortcuts import render
+from .forms import BusquedaUsuarioAvanzadoForm
+
 def busqueda_usuario_avanzado_api(request):
     profesor = os.getenv('TEACHER_USER')
+    errores = None  # Inicializamos errores como None
+
     if len(request.GET) > 0:
         print("Datos recibidos en request.GET:", request.GET)  # Depuración
         formulario = BusquedaUsuarioAvanzadoForm(request.GET)
@@ -147,34 +155,41 @@ def busqueda_usuario_avanzado_api(request):
                     params=formulario.cleaned_data
                 )
 
-                if (response.status_code == requests.codes.ok):
+                if response.status_code == 200:
                     usuarios = response.json()
-                    return render(request, 'Usuario/busqueda_usuario_avanzada_api.html', {"usuarios_mostrar": usuarios})
+                    return render(request, 'Usuario/busqueda_usuario_avanzada_api.html', {
+                        "usuarios_mostrar": usuarios,
+                        "formulario": formulario,
+                        "errores": errores
+                    })
                 else:
-                    print("Error de estado:", response.status_code)
-                    response.raise_for_status()
-
+                    errores = response.json()  # Capturar errores devueltos por la API
+                    print("Errores recibidos del servidor:", errores)
+            
             except HTTPError as http_err:
                 print(f'Hubo un error en la petición: {http_err}')
-                if response.status_code == 400:
-                    errores = response.json()
-                    for error in errores:
-                        formulario.add_error(error, errores[error])
-                    return render(request, 'Usuario/busqueda_usuario_avanzada_api.html', {"formulario": formulario, "errores": errores})
-                else:
-                    return mi_error_500(request)
+                errores = {"error": "Error en la comunicación con el servidor."}
+
             except Exception as err:
-                print(f'Ocurrió un error: {err}')
-                return mi_error_500(request)
+                print(f'Ocurrió un error inesperado: {err}')
+                errores = {"error": "Ocurrió un error inesperado. Inténtalo más tarde."}
+
         else:
-            print("Errores del formulario:", formulario.errors)  # Depuración
+            errores = formulario.errors
+            print("Errores del formulario en el cliente:", errores)  # Depuración
+
     else:
         formulario = BusquedaUsuarioAvanzadoForm(None)
 
-    return render(request, 'Usuario/busqueda_usuario_avanzada_api.html', {"formulario": formulario})
+    return render(request, 'Usuario/busqueda_usuario_avanzada_api.html', {
+        "formulario": formulario,
+        "errores": errores
+    })
+
 
 def busqueda_tutorial_avanzado_api(request):
     profesor = os.getenv('TEACHER_USER')
+    errores = None
     if len(request.GET) > 0:
         print("Datos recibidos en request.GET:", request.GET)  # Depuración
         formulario = BusquedaTutorialAvanzadoForm(request.GET)
@@ -192,32 +207,31 @@ def busqueda_tutorial_avanzado_api(request):
 
                 if (response.status_code == requests.codes.ok):
                     tutorial = response.json()
-                    return render(request, 'Tutorial/busqueda_tutorial_avanzada_api.html', {"tutorial_mostrar": tutorial})
+                    return render(request, 'Tutorial/busqueda_tutorial_avanzada_api.html', {"tutorial_mostrar": tutorial, "formulario": formulario,
+                        "errores": errores})
                 else:
-                    print("Error de estado:", response.status_code)
-                    response.raise_for_status()
+                    errores = response.json()  # Capturar errores devueltos por la API
+                    print("Errores recibidos del servidor:", errores)
 
             except HTTPError as http_err:
                 print(f'Hubo un error en la petición: {http_err}')
-                if response.status_code == 400:
-                    errores = response.json()
-                    for error in errores:
-                        formulario.add_error(error, errores[error])
-                    return render(request, 'Tutorial/busqueda_tutorial_avanzada_api.html', {"formulario": formulario, "errores": errores})
-                else:
-                    return mi_error_500(request)
+                errores = {"error": "Error en la comunicación con el servidor."}
+
             except Exception as err:
-                print(f'Ocurrió un error: {err}')
-                return mi_error_500(request)
+                print(f'Ocurrió un error inesperado: {err}')
+                errores = {"error": "Ocurrió un error inesperado. Inténtalo más tarde."}
+
         else:
-            print("Errores del formulario:", formulario.errors)  # Depuración
+            errores = formulario.errors
+            print("Errores del formulario en el cliente:", errores)  # Depuración # Depuración
     else:
         formulario = BusquedaTutorialAvanzadoForm(None)
 
-    return render(request, 'Tutorial/busqueda_tutorial_avanzada_api.html', {"formulario": formulario})
+    return render(request, 'Tutorial/busqueda_tutorial_avanzada_api.html', {"formulario": formulario, "errores": errores})
    
 def busqueda_perfil_avanzado_api(request):
     profesor = os.getenv('TEACHER_USER')
+    errores = None
     if len(request.GET) > 0:
         print("Datos recibidos en request.GET:", request.GET)  # Depuración
         formulario = BusquedaPerfilAvanzadoForm(request.GET)
@@ -235,32 +249,31 @@ def busqueda_perfil_avanzado_api(request):
 
                 if (response.status_code == requests.codes.ok):
                     perfil = response.json()
-                    return render(request, 'Perfil/busqueda_perfil_avanzada_api.html', {"perfil_mostrar": perfil})
+                    return render(request, 'Perfil/busqueda_perfil_avanzada_api.html', {"perfil_mostrar": perfil, "formulario": formulario,
+                        "errores": errores})
                 else:
-                    print("Error de estado:", response.status_code)
-                    response.raise_for_status()
+                    errores = response.json()  # Capturar errores devueltos por la API
+                    print("Errores recibidos del servidor:", errores)
 
             except HTTPError as http_err:
                 print(f'Hubo un error en la petición: {http_err}')
-                if response.status_code == 400:
-                    errores = response.json()
-                    for error in errores:
-                        formulario.add_error(error, errores[error])
-                    return render(request, 'Perfil/busqueda_perfil_avanzada_api.html', {"formulario": formulario, "errores": errores})
-                else:
-                    return mi_error_500(request)
+                errores = {"error": "Error en la comunicación con el servidor."}
+
             except Exception as err:
-                print(f'Ocurrió un error: {err}')
-                return mi_error_500(request)
+                print(f'Ocurrió un error inesperado: {err}')
+                errores = {"error": "Ocurrió un error inesperado. Inténtalo más tarde."}
+
         else:
-            print("Errores del formulario:", formulario.errors)  # Depuración
+            errores = formulario.errors
+            print("Errores del formulario en el cliente:", errores)  # Depuración # Depuración
     else:
         formulario = BusquedaPerfilAvanzadoForm(None)
 
-    return render(request, 'Perfil/busqueda_perfil_avanzada_api.html', {"formulario": formulario})
+    return render(request, 'Perfil/busqueda_perfil_avanzada_api.html', {"formulario": formulario, })
 
 def busqueda_comentario_avanzado_api(request):
     profesor = os.getenv('TEACHER_USER')
+    errores = None
     if len(request.GET) > 0:
         print("Datos recibidos en request.GET:", request.GET)  # Depuración
         formulario = BusquedaComentarioAvanzadoForm(request.GET)

@@ -2,32 +2,58 @@
 
 {% block cabecera %}
     <h1 class="text-center text-primary my-4">Búsqueda Avanzada de Tutoriales</h1>
-    <p class="text-center text-secondary">Filtros de búsqueda</p>
+    <p class="text-center text-secondary">Utiliza los filtros para encontrar tutoriales específicos</p>
 {% endblock %}
 
 {% block contenido %}
     <div class="card shadow p-4">
         <h2 class="text-secondary mb-4">Filtros de búsqueda</h2>
-        <form method="GET" class="mb-4">
+
+        <!-- Mostrar errores generales -->
+        {% if errores %}
+            <div class="alert alert-danger">
+                <strong>Errores encontrados:</strong>
+                <ul>
+                    {% for campo, lista_errores in errores.items %}
+                        {% for error in lista_errores %}
+                            <li>{{ campo }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <form method="GET" action="{% url 'busqueda_tutorial_avanzado_api' %}" class="mb-4">
             {% csrf_token %}
-            {{ formulario.titulo.label_tag }}
-            {{ formulario.titulo }}
-            {% for error in formulario.titulo.errors %}
-                <div class="text-danger"><small>{{ error }}</small></div>
-            {% endfor %}
+            
+            <!-- Campo de Título -->
+            <div class="form-group mb-3">
+                {{ formulario.titulo.label_tag }}
+                {{ formulario.titulo }}
+                {% for error in formulario.titulo.errors %}
+                    <div class="text-danger"><small>{{ error }}</small></div>
+                {% endfor %}
+            </div>
 
-            {{ formulario.visitas.label_tag }}
-            {{ formulario.visitas }}
-            {% for error in formulario.visitas.errors %}
-                <div class="text-danger"><small>{{ error }}</small></div>
-            {% endfor %}
+            <!-- Campo de Visitas -->
+            <div class="form-group mb-3">
+                {{ formulario.visitas.label_tag }}
+                {{ formulario.visitas }}
+                {% for error in formulario.visitas.errors %}
+                    <div class="text-danger"><small>{{ error }}</small></div>
+                {% endfor %}
+            </div>
 
-            {{ formulario.valoracion.label_tag }}
-            {{ formulario.valoracion }}
-            {% for error in formulario.valoracion.errors %}
-                <div class="text-danger"><small>{{ error }}</small></div>
-            {% endfor %}
+            <!-- Campo de Valoración -->
+            <div class="form-group mb-3">
+                {{ formulario.valoracion.label_tag }}
+                {{ formulario.valoracion }}
+                {% for error in formulario.valoracion.errors %}
+                    <div class="text-danger"><small>{{ error }}</small></div>
+                {% endfor %}
+            </div>
 
+            <!-- Botón de búsqueda -->
             <button type="submit" class="btn btn-primary w-100">Buscar</button>
         </form>
     </div>
@@ -35,6 +61,7 @@
     <hr>
 
     <h2 class="text-center text-secondary my-4">Resultados de búsqueda</h2>
+
     <div class="row">
         {% if tutorial_mostrar %}
             {% for tutorial in tutorial_mostrar %}
@@ -44,7 +71,7 @@
                             <h5 class="card-title">{{ tutorial.titulo }}</h5>
                             <p class="card-text">
                                 <strong>Contenido:</strong> {{ tutorial.contenido|truncatewords:10 }}<br>
-                                <strong>Fecha de creacion:</strong> {{ tutorial.fecha_Creacion|date:"d \d\e F \d\e Y" }}<br>
+                                <strong>Fecha de Creación:</strong> {{ tutorial.fecha_Creacion|date:"d \d\e F \d\e Y" }}<br>
                                 <strong>Valoraciones:</strong> {{ tutorial.valoracion }}<br>
                                 <strong>Visitas:</strong> {{ tutorial.visitas }}<br>
                             </p>
