@@ -1,5 +1,3 @@
-# Proyecto1Modelos_API_Cliente
-# Proyecto1Modelos_API_Cliente
 TOKEN DE ADMIN
 curl -X POST "http://localhost:8000/oauth2/token/" -d "grant_type=password&username=administrator@gmail.com&password=admin33&client_id=mi_aplicacion&client_secret=mi_clave_secreta"
 

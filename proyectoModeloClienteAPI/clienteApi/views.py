@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.core import serializers
 from django.conf import settings
 import os
+from requests.exceptions import HTTPError
 from dotenv import load_dotenv
 from .forms import *
 
@@ -60,11 +61,11 @@ def tutorial_lista_apiEstudiante(request):
     })
 
 def usuario_lista_api(request):
-    # Le damos el permiso de autorizacion
     profesor = os.getenv('TEACHER_USER')
+    # Le damos el permiso de autorizacion
     headers_Profesor = {'Authorization': f'Bearer {profesor}'}
     # Obtenemos todos los usuarios de la api
-    response = requests.get('http://potito.pythonanywhere.com/api/v1/usuario', headers=headers_Profesor)
+    response = requests.get('http://127.0.0.1:8092/api/v1/usuario', headers=headers_Profesor)
     # Transformamos la respuesta en JSON
     usuarios = response.json()
     return render(request, 'Usuario/lista_usuario_api.html', {
@@ -98,23 +99,248 @@ def etiquetas_lista_api(request):
         'etiquetas_mostrar': etiquetas
     })
 
+# Vista de los formularios de busqueda basicos
+
 def crear_cabezera():
-    profesor = os.getenv('TEACHER_USER')
-    return {'Authorization': f'Bearer {profesor}'}
+    return {'Authorization': 'Bearer FZ6oExxJOhtg5cHiiTrbRFPOuL3jh8'}
 
 def busqueda_usuario_simple_api(request):
-    formulario = BusquedaUsuarioForm(request.GET)
+    profesor = os.getenv('TEACHER_USER')
+    if len(request.GET) > 0:
+        print("Datos recibidos en request.GET:", request.GET)  # Depuración
+        formulario = BusquedaUsuarioForm(request.GET)
 
-    if formulario.is_valid():
-        headers = crear_cabezera()
-        response = requests.get('http://127.0.0.1:8000/api/v1/usuario', 
-                                headers=headers,
-                                params = formulario.cleaned_data)
-        usuarios = response.json()
-        return render (request, 'Usuario/busqueda_usuario_simple_api.html', { "usuarios_mostrar": usuarios})
-    
-    referer = request.META.get("HTTP_REFERER")
-    if referer:
-        return HttpResponseRedirect(referer)
+        if formulario.is_valid():
+            headers = {'Authorization': f'Bearer {profesor}'}
+            response = requests.get('http://potito.pythonanywhere.com/api/v1/usuario', 
+                                    headers=headers,
+                                    params=formulario.cleaned_data)
+            usuarios = response.json()
+            return render(request, 'Usuario/busqueda_usuario_simple_api.html', {"usuarios_mostrar": usuarios})
+        else:
+            print("Errores del formulario:", formulario.errors)  # Depuración
+            referer = request.META.get("HTTP_REFERER")
+            if referer:
+                return HttpResponseRedirect(referer)
+            else:
+                return redirect('inicio')
     else:
-        return redirect('inicio')
+        formulario = BusquedaUsuarioForm(None)
+        return render(request, 'Usuario/busqueda_usuario_simple_api.html', {"formulario": formulario})
+
+# Vista de los formularios de busqueda avanzados
+
+import os
+import requests
+from requests.exceptions import HTTPError
+from django.shortcuts import render
+from .forms import BusquedaUsuarioAvanzadoForm
+
+def busqueda_usuario_avanzado_api(request):
+    profesor = os.getenv('TEACHER_USER')
+    errores = None  # Inicializamos errores como None
+
+    if len(request.GET) > 0:
+        print("Datos recibidos en request.GET:", request.GET)  # Depuración
+        formulario = BusquedaUsuarioAvanzadoForm(request.GET)
+        
+        if formulario.is_valid():
+            try:
+                headers = {'Authorization': f'Bearer {profesor}'}
+                print("Datos enviados en params:", formulario.cleaned_data)  # Depuración
+                
+                response = requests.get(
+                    'http://potito.pythonanywhere.com/api/v1/usuario/busqueda_avanzada_usuario', 
+                    headers=headers,
+                    params=formulario.cleaned_data
+                )
+
+                if response.status_code == 200:
+                    usuarios = response.json()
+                    return render(request, 'Usuario/busqueda_usuario_avanzada_api.html', {
+                        "usuarios_mostrar": usuarios,
+                        "formulario": formulario,
+                        "errores": errores
+                    })
+                else:
+                    errores = response.json()  # Capturar errores devueltos por la API
+                    print("Errores recibidos del servidor:", errores)
+            
+            except HTTPError as http_err:
+                print(f'Hubo un error en la petición: {http_err}')
+                errores = {"error": "Error en la comunicación con el servidor."}
+
+            except Exception as err:
+                print(f'Ocurrió un error inesperado: {err}')
+                errores = {"error": "Ocurrió un error inesperado. Inténtalo más tarde."}
+
+        else:
+            errores = formulario.errors
+            print("Errores del formulario en el cliente:", errores)  # Depuración
+
+    else:
+        formulario = BusquedaUsuarioAvanzadoForm(None)
+
+    return render(request, 'Usuario/busqueda_usuario_avanzada_api.html', {
+        "formulario": formulario,
+        "errores": errores
+    })
+
+
+import logging
+
+logger = logging.getLogger(__name__)  # Configurar logs
+
+def busqueda_tutorial_avanzado_api(request):
+    profesor = os.getenv('TEACHER_USER')
+    errores = None  # Inicializar errores
+
+    if len(request.GET) > 0:
+        logger.info("Datos recibidos en request.GET: %s", request.GET)  # Log de depuración
+        formulario = BusquedaTutorialAvanzadoForm(request.GET)
+
+        if formulario.is_valid():
+            try:
+                headers = {'Authorization': f'Bearer {profesor}'}
+                logger.info("Datos enviados en params: %s", formulario.cleaned_data)  # Log de depuración
+                
+                response = requests.get(
+                    'http://potito.pythonanywhere.com/api/v1/tutorial/busqueda_avanzada_tutorial', 
+                    headers=headers,
+                    params=formulario.cleaned_data
+                )
+
+                if response.status_code == requests.codes.ok:
+                    tutoriales = response.json()
+                    return render(request, 'Tutorial/busqueda_tutorial_avanzada_api.html', {
+                        "tutorial_mostrar": tutoriales,
+                        "formulario": formulario,
+                        "errores": errores
+                    })
+                else:
+                    errores = response.json()  # Capturar errores devueltos por la API
+                    logger.warning("Errores recibidos del servidor: %s", errores)
+
+            except HTTPError as http_err:
+                logger.error("Error HTTP en la petición: %s", http_err)
+                errores = {"error": f"Error en la comunicación con el servidor: {http_err}"}
+
+            except Exception as err:
+                logger.error("Ocurrió un error inesperado: %s", err)
+                errores = {"error": "Ocurrió un error inesperado. Inténtalo más tarde."}
+
+        else:
+            errores = formulario.errors
+            logger.warning("Errores del formulario en el cliente: %s", errores)  # Log de depuración
+    else:
+        formulario = BusquedaTutorialAvanzadoForm(None)
+
+    return render(request, 'Tutorial/busqueda_tutorial_avanzada_api.html', {
+        "formulario": formulario,
+        "errores": errores
+    })
+
+def busqueda_perfil_avanzado_api(request):
+    profesor = os.getenv('TEACHER_USER')
+    errores = None  # Inicializar errores
+
+    if len(request.GET) > 0:
+        logger.info("Datos recibidos en request.GET: %s", request.GET)  # Log de depuración
+        formulario = BusquedaPerfilAvanzadoForm(request.GET)
+
+        if formulario.is_valid():
+            try:
+                headers = {'Authorization': f'Bearer {profesor}'}
+                logger.info("Datos enviados en params: %s", formulario.cleaned_data)  # Log de depuración
+                
+                response = requests.get(
+                    'http://potito.pythonanywhere.com/api/v1/perfil/busqueda_avanzda_perfil', 
+                    headers=headers,
+                    params=formulario.cleaned_data
+                )
+
+                if response.status_code == requests.codes.ok:
+                    perfil = response.json()
+                    return render(request, 'Perfil/busqueda_perfil_avanzada_api.html', {
+                        "perfil_mostrar": perfil,
+                        "formulario": formulario,
+                        "errores": errores
+                    })
+                else:
+                    errores = response.json()  # Capturar errores devueltos por la API
+                    logger.warning("Errores recibidos del servidor: %s", errores)
+
+            except HTTPError as http_err:
+                logger.error("Error HTTP en la petición: %s", http_err)
+                errores = {"error": f"Error en la comunicación con el servidor: {http_err}"}
+
+            except Exception as err:
+                logger.error("Ocurrió un error inesperado: %s", err)
+                errores = {"error": "Ocurrió un error inesperado. Inténtalo más tarde."}
+
+        else:
+            errores = formulario.errors
+            logger.warning("Errores del formulario en el cliente: %s", errores)  # Log de depuración
+    else:
+        formulario = BusquedaPerfilAvanzadoForm(None)
+
+    return render(request, 'Perfil/busqueda_perfil_avanzada_api.html', {
+        "formulario": formulario,
+        "errores": errores
+    })
+
+def busqueda_comentario_avanzado_api(request):
+    profesor = os.getenv('TEACHER_USER')
+    errores = None  # Variable para capturar errores
+
+    if len(request.GET) > 0:
+        print("Datos recibidos en request.GET:", request.GET)  # Depuración
+        formulario = BusquedaComentarioAvanzadoForm(request.GET)
+        
+        if formulario.is_valid():
+            try:
+                headers = {'Authorization': f'Bearer {profesor}'}
+                print("Datos enviados en params:", formulario.cleaned_data)  # Depuración
+                
+                response = requests.get(
+                    'http://potito.pythonanywhere.com/api/v1/comentario/busqueda_avanzada_comentario', 
+                    headers=headers,
+                    params=formulario.cleaned_data
+                )
+
+                if response.status_code == requests.codes.ok:
+                    comentarios = response.json()
+                    return render(request, 'Comentario/busqueda_comentario_avanzada_api.html', {
+                        "comentario_mostrar": comentarios,
+                        "formulario": formulario,
+                        "errores": errores
+                    })
+                else:
+                    errores = response.json()  # Capturar errores devueltos por la API
+                    print("Errores recibidos del servidor:", errores)
+
+            except HTTPError as http_err:
+                print(f'Error HTTP en la petición: {http_err}')
+                errores = {"error": f"Error en la comunicación con el servidor: {http_err}"}
+
+            except Exception as err:
+                print(f'Ocurrió un error inesperado: {err}')
+                errores = {"error": "Ocurrió un error inesperado. Inténtalo más tarde."}
+
+        else:
+            errores = formulario.errors
+            print("Errores del formulario en el cliente:", errores)  # Depuración
+    else:
+        formulario = BusquedaComentarioAvanzadoForm(None)
+
+    return render(request, 'Comentario/busqueda_comentario_avanzada_api.html', {
+        "formulario": formulario,
+        "errores": errores
+    })
+
+
+   #Errores
+   
+def mi_error_500(request,exception=None):
+    return render(request, 'errores/500.html',None,None,500)
+

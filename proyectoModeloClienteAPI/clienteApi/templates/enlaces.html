@@ -15,7 +15,6 @@
       <li class="list-group-item"><a href="{% url 'listar_tutoriales_api' %}" class="text-decoration-none">Lista tutoriales api(Token de Profesor)</a></li>
       <li class="list-group-item"><a href="{% url 'listar_tutoriales_apiEstudiante' %}" class="text-decoration-none">Lista tutoriales api(Token de estudiante)</a></li>
       <li class="list-group-item"><a href="{% url 'listar_tutoriales_apiAdmin' %}" class="text-decoration-none">Lista tutoriales api(Token de Admin)</a></li>
-      <li class="list-group-item"><a href="{% url 'lista_cursos_api' %}" class="text-decoration-none">Lista Cursos api</a></li>
       <li class="list-group-item"><a href="{% url 'listar_usuarios_api' %}" class="text-decoration-none">Lista usuarios api</a></li>
       <li class="list-group-item"><a href="{% url 'listar_categoria_api' %}" class="text-decoration-none">Lista categorias api</a></li>
       <li class="list-group-item"><a href="{% url 'lista_etiquetas_api' %}" class="text-decoration-none">Lista etiquetas api</a></li>
@@ -36,6 +35,12 @@
 
     <!-- Sección de Busquedas Avanzadas -->
     <h2 class="text-center text-success mt-4 mb-3">Busqueda Avanzadas</h2>
+    <ul class="list-group">
+      <li class="list-group-item"><a href="{% url 'busqueda_usuario_avanzado_api' %}" class="text-decoration-none">Buscar Usuarios avanzada api</a></li>
+      <li class="list-group-item"><a href="{% url 'busqueda_tutorial_avanzado_api' %}" class="text-decoration-none">Buscar Tutorial avanzado api</a></li>
+      <li class="list-group-item"><a href="{% url 'busqueda_perfil_avanzado_api' %}" class="text-decoration-none">Buscar Perfil avanzado api</a></li>
+      <li class="list-group-item"><a href="{% url 'busqueda_comentario_avanzado_api' %}" class="text-decoration-none">Buscar Comentario avanzado api</a></li>
+    </ul>
     
 </div>
 {% endblock %}

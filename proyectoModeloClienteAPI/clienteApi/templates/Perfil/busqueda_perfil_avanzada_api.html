@@ -1,0 +1,64 @@
+{% extends "Padre.html" %}
+
+{% block cabecera %}
+<h1 class="text-center text-primary my-4">Búsqueda Avanzada de Perfiles</h1>
+<p class="text-center text-secondary">Filtros de búsqueda</p>
+{% endblock %}
+
+{% block contenido %}
+<div class="card shadow p-4">
+    <h2 class="text-secondary mb-4">Filtros de búsqueda</h2>
+    <form method="GET" class="mb-4">
+        {{ formulario.fecha_Nacimiento.label_tag }}
+        {{ formulario.fecha_Nacimiento }}
+        {% for error in formulario.fecha_Nacimiento.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+        {% endfor %}
+
+        {{ formulario.redes.label_tag }}
+        {{ formulario.redes }}
+        {% for error in formulario.redes.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+        {% endfor %}
+
+        {{ formulario.estudios.label_tag }}
+        {{ formulario.estudios }}
+        {% for error in formulario.estudios.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary w-100">Buscar</button>
+    </form>
+</div>
+
+<hr>
+
+<h2 class="text-center text-secondary my-4">Resultados de búsqueda</h2>
+
+<div class="row">
+    {% for perfil in perfil_mostrar %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ perfil.bio|truncatewords:10 }}</h5>
+                <p class="card-text">
+                    <strong>Fecha de nacimiento:</strong> {{ perfil.fecha_Nacimiento|date:"d \d\e F \d\e Y" }}<br>
+                    <strong>Redes sociales:</strong> {{ perfil.redes }}<br>
+                    <strong>Estudios:</strong> {{ perfil.estudios }}
+                </p>
+            </div>
+            <div class="card-footer text-center">
+                {% load bootstrap_icons %}
+                <div class="row btn-group">
+                    <!-- Aquí puedes agregar botones o acciones adicionales -->
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <p class="text-center text-danger">No se encontraron resultados.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,26 +1,27 @@
 {% extends "Padre.html" %}
 {% block contenido %}
 
-<h1 class="display-3">Lista de Usuarios</h1>
+<!-- Usuario/busqueda_usuario_simple_api.html -->
+<form method="get" action="{% url 'busqueda_usuario_simple_api' %}" class="mb-4">
+    {{ formulario.as_p }}
+    <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
 
-<div class="row">
-    {% for usuario in usuarios_mostrar %}
-    <div class="col-sm-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">{{ usuario.nombre }}</h5>
-                <p class="card-text"><strong>Email:</strong> {{ usuario.email }}</p>
-                <p class="card-text"><strong>Fecha de Registro:</strong> {{ usuario.fecha_Registro }}</p>
-                <p class="card-text"><strong>Activo?:</strong> {{ usuario.es_activo }}</p>
-                <p class="card-text"><strong>Puntuación:</strong> {{ usuario.puntuacion }}</p>
+{% if usuarios_mostrar %}
+    <div class="row">
+        {% for usuario in usuarios_mostrar %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ usuario.nombre }}</h5>
+                        <p class="card-text">{{ usuario.email }}</p>
+                    </div>
+                </div>
             </div>
-        </div>
+        {% endfor %}
     </div>
-    {% empty %}
-    <div class="col-12">
-        <h3 class="text-center">Lo sentimos mucho, no hay usuarios disponibles</h3>
-    </div>
-    {% endfor %}
-</div>
+{% elif error %}
+    <p class="text-danger">Error: {{ error }}</p>
+{% endif %}
 
 {% endblock %}
