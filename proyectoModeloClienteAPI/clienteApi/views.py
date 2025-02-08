@@ -90,11 +90,27 @@ def categoria_lista_api(request):
         'categorias_mostrar': categorias
     })
 
+import xml.etree.ElementTree as ET
+
+def parse_response(response):
+    """Parsea la respuesta según el tipo de contenido."""
+    content_type = response.headers.get("Content-Type", "")
+
+    if "application/json" in content_type:
+        return response.json()
+    elif "application/xml" in content_type or "text/xml" in content_type:
+        return ET.fromstring(response.text)  # Convierte XML en un árbol de elementos
+    else:
+        return response.text  # Devuelve texto sin procesar si no se reconoce el formato
+
 def etiquetas_lista_api(request):
     profesor = os.getenv('TEACHER_USER')
     headers = {'Authorization': f'Bearer {profesor}'}
+    
     response = requests.get('http://potito.pythonanywhere.com/api/v1/etiqueta', headers=headers)
-    etiquetas = response.json()
+    
+    etiquetas = parse_response(response)  # Usa la función dentro de la vista
+
     return render(request, 'Etiquetas/lista_etiquetas_api.html', {
         'etiquetas_mostrar': etiquetas
     })
@@ -137,6 +153,7 @@ from django.shortcuts import render
 from .forms import BusquedaUsuarioAvanzadoForm
 
 def busqueda_usuario_avanzado_api(request):
+    url = os.getenv('URLANYWHERE')
     profesor = os.getenv('TEACHER_USER')
     errores = None  # Inicializamos errores como None
 
@@ -150,7 +167,7 @@ def busqueda_usuario_avanzado_api(request):
                 print("Datos enviados en params:", formulario.cleaned_data)  # Depuración
                 
                 response = requests.get(
-                    'http://potito.pythonanywhere.com/api/v1/usuario/busqueda_avanzada_usuario', 
+                    f'{url}usuario/busqueda_avanzada_usuario', 
                     headers=headers,
                     params=formulario.cleaned_data
                 )
