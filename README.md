@@ -7,3 +7,11 @@ curl -X POST "http://127.0.0.1:8092/oauth2/token/" -d "grant_type=password&usern
 
 TOKEN DE ESTUDIANTE
 curl -X POST "http://localhost:8000/oauth2/token/" -d "grant_type=password&username=<YOUR_USERNAME>&password=<YOUR_PASSWORD>&client_id=mi_aplicacion&client_secret=mi_clave_secreta"
+
+Usuario Administrador:
+Administrator@gmail.com     Email
+Admin33                     Contraseña
+
+Usuario Profesor:
+test3@gmail.com             Email
+abecedario                  Contraseña
