@@ -8,6 +8,20 @@
 {% block contenido %}
 <div class="card shadow p-4">
     <h2 class="text-secondary mb-4">Filtros de búsqueda</h2>
+
+    {% if errores %}
+    <div class="alert alert-danger">
+        <strong>Errores encontrados:</strong>
+        <ul>
+            {% for campo, lista_errores in errores.items %}
+                {% for error in lista_errores %}
+                    <li>{{ campo }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
     <form method="GET" class="mb-4">
         {{ formulario.contenido.label_tag }}
         {{ formulario.contenido }}
