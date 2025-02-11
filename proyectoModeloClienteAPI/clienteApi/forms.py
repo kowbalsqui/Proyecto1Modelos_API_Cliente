@@ -115,3 +115,44 @@ class BusquedaComentarioAvanzadoForm(forms.Form):
             'placeholder': 'Ej: 5.0',
         })
     )
+
+class Create_usuario(forms.Form):
+    nombre = forms.CharField(
+        required= True,
+        max_length=20,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contenido...',
+        })
+    )
+    
+    email = forms.CharField(
+        required= True,
+        max_length=20,
+        widget= forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Email' 
+        })
+    )
+    puntuacion = forms.DecimalField(
+        max_digits=3, 
+        decimal_places=1, 
+        required=True,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ej: 5.0'
+        })
+    )
+    es_activo = forms.BooleanField(
+        required=True,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
+        })
+    )
+    fecha_Registro = forms.DateField(
+        required=True,
+        widget=forms.DateInput(attrs={
+            'class': 'form-control',
+            'type': 'date',
+        })
+    )
