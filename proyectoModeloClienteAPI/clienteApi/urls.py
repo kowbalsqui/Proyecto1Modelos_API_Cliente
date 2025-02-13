@@ -22,4 +22,8 @@ urlpatterns = [
     path('Comentario/busqueda_comentario_avanzado_api', views.busqueda_comentario_avanzado_api, name = 'busqueda_comentario_avanzado_api'),
     #URL POST
     path('Usuario/crear_usuario_api', views.crear_usuario_api, name = 'crear_usuario_api'),
+    #URL PUT
+    path('Usuario/editar_usuario_api/<int:usuario_id>', views.editar_usuario_api, name = 'editar_usuario_api'),
+    path('Usuario/mostrar/<int:usuario_id>', views.usuario_obtener, name='usuario_mostrar'),
+
 ]

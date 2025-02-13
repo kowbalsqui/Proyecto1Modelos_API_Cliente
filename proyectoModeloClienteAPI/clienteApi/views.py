@@ -8,6 +8,8 @@ from requests.exceptions import HTTPError
 from dotenv import load_dotenv
 from .forms import *
 import json
+from .helper import helper
+from .cliente_api import cliente_api
 
 # Cargar el archivo .env
 load_dotenv()
@@ -374,12 +376,7 @@ def crear_usuario_api (request):
                 'Content-Type': 'application/json'
             }
             datos = formulario.data.copy()
-            datos["fecha_Registro"] = str(
-                datetime.date(year= int(datos['fecha_Registro_year']),
-                            month= int(datos['fecha_Registro_month']),
-                            day= int(datos['fecha_Registro_day']))
-            )
-            response = request.post(
+            response = requests .post(
                 'http://127.0.0.1:8092/api/v1/usuario/crear_usuario_api',
                 headers= headers,
                 data = json.dumps(datos)
@@ -407,3 +404,50 @@ def crear_usuario_api (request):
     else:
             formulario = Create_usuario(None)
     return render(request, 'Usuario/crear_usuario_api.html',{"formulario":formulario})
+
+#Editar en la API
+
+def usuario_obtener(request, usuario_id):
+    usuario = helper.obtener_usuarios(usuario_id)
+    return render(request, 'Usuario/usuario_obtener.html', {'usuario': usuario})
+
+def editar_usuario_api(request, usuario_id):
+    datosFormulario = None
+    
+    if request.method == "POST":
+        datosFormulario = request.POST
+    
+    usuario = helper.obtener_usuarios(usuario_id)
+    formulario = Create_usuario(datosFormulario,
+                                initial={
+                                    'nombre': usuario['nombre'],
+                                    'email': usuario['email'],
+                                    'es_activo': usuario['es_activo'],
+                                    'puntuacion': usuario['puntuacion'],
+                                    'fecha_Registro': usuario['fecha_Registro'],
+                                }
+    )
+    if(request.method == "POST"):
+        formulario = Create_usuario(request.POST)
+        datos = request.POST.copy()
+        api_cliente = cliente_api("PUT", f"usuario/editar/{usuario_id}", datos)
+        api_cliente.realizar_peticion_api()
+        if(api_cliente.es_respuesta_correcta()):
+            return redirect("usuario_mostrar",usuario_id=usuario_id)
+        else:
+            if(api_cliente.es_error_validacion_datos()):
+                api_cliente.incluir_errores_formulario(formulario)
+            else:
+                return tratar_errores(request,api_cliente.codigoRespuesta)
+    return render(request, 'Usuario/actualizar.html',{"formulario":formulario,"usuario":usuario, "usuario_id":usuario_id})
+
+
+def tratar_errores(request,codigo):
+    if codigo == 404:
+        return mi_error_404(request)
+    else:
+        return mi_error_500(request)
+        
+#Páginas de Error
+def mi_error_404(request,exception=None):
+    return render(request, 'errores/404.html',None,None,404)
