@@ -7,6 +7,7 @@ import os
 from requests.exceptions import HTTPError
 from dotenv import load_dotenv
 from .forms import *
+import json
 
 # Cargar el archivo .env
 load_dotenv()
@@ -361,3 +362,48 @@ def busqueda_comentario_avanzado_api(request):
 def mi_error_500(request,exception=None):
     return render(request, 'errores/500.html',None,None,500)
 
+#Crear en la API
+
+def crear_usuario_api (request):
+    profesor = os.getenv('TEACHER_USER')
+    if (request.method == 'POST'):
+        try:
+            formulario = Create_usuario(request.POST)
+            headers = {
+                'Authorization': f'Bearer {profesor}',
+                'Content-Type': 'application/json'
+            }
+            datos = formulario.data.copy()
+            datos["fecha_Registro"] = str(
+                datetime.date(year= int(datos['fecha_Registro_year']),
+                            month= int(datos['fecha_Registro_month']),
+                            day= int(datos['fecha_Registro_day']))
+            )
+            response = request.post(
+                'http://127.0.0.1:8092/api/v1/usuario/crear_usuario_api',
+                headers= headers,
+                data = json.dumps(datos)
+            )
+            if(response.status_code == requests.codes.ok):
+                return redirect('listar_usuarios_api')
+            else: 
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un error en la petición: {http_err}')
+            if(response.status_code == 400):
+                errores = response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request, 
+                            'Usuario/crear_usuario_api.html',
+                            {"formulario":formulario})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+            
+    else:
+            formulario = Create_usuario(None)
+    return render(request, 'Usuario/crear_usuario_api.html',{"formulario":formulario})

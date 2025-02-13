@@ -20,4 +20,6 @@ urlpatterns = [
     path('Tutorial/busqueda_tutorial_avanzado_api', views.busqueda_tutorial_avanzado_api, name = 'busqueda_tutorial_avanzado_api'),
     path('Cursos/busqueda_perfil_avanzado_api', views.busqueda_perfil_avanzado_api, name = 'busqueda_perfil_avanzado_api'),
     path('Comentario/busqueda_comentario_avanzado_api', views.busqueda_comentario_avanzado_api, name = 'busqueda_comentario_avanzado_api'),
+    #URL POST
+    path('Usuario/crear_usuario_api', views.crear_usuario_api, name = 'crear_usuario_api'),
 ]
