@@ -14,6 +14,13 @@
                 <p class="card-text"><strong>Visitas:</strong> {{ tutorial.visitas }}</p>
                 <p class="card-text"><strong>Valoración:</strong> {{ tutorial.valoracion }}</p>
                 <p class="card-text"><strong>Usuario:</strong> {{ tutorial.usuario.nombre }}</p>
+                
+                <a href="{% url 'editar_tutorial_api' tutorial.id %}" class="btn btn-primary mt-3">Editar</a>
+                <a href="{% url 'actualizar_titulo_tutorial_api' tutorial.id %}" class="btn btn-primary mt-3">Editar Titulo</a>
+                <form action="{% url 'tutorial_eliminar' tutorial.id %}" method="post" onsubmit="return eliminar();">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Eliminar</button> 
+                </form>
             </div>
         </div>
     </div>

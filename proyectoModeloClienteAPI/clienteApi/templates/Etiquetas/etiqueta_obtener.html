@@ -1,0 +1,28 @@
+{% extends "Padre.html" %}
+
+{% block contenido %}
+
+<h1 class="display-3">Detalles de la Etiqueta</h1>
+
+<div class="row">
+    <div class="col-sm-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ etiqueta.nombre }}</h5>
+                <p class="card-text"><strong>Color:</strong> {{ etiqueta.color }}</p>
+                <p class="card-text"><strong>Descripcion:</strong> {{ etiqueta.descripcion }}</p>
+                <p class="card-text"><strong>Publica?:</strong> {{ etiqueta.publica }}</p>
+                <p class="card-text"><strong>Tutoriales:</strong></p>
+                    <ul>
+                        {% for tutorial in etiqueta.tutorial %}
+                            <li>{{ tutorial.titulo }}</li>
+                        {% empty %}
+                            <li>No hay tutoriales asociados</li>
+                        {% endfor %}
+                    </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

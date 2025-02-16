@@ -10,7 +10,17 @@
                 <h6 class="card-subtitle mb-2 text-muted">Color: {{ etiqueta.color }}</h6>
                 <p class="card-text">Publica: {{ etiqueta.publica }}</p>
                 <p class="card-text">Descripción: {{ etiqueta.descripcion }}</p>
-                <p class="card-text">Tutorial: <a href="{{ etiqueta.tutorial.url }}">{{ etiqueta.tutorial.titulo }}</a></p>
+                <p class="card-text">Tutoriales:
+                    {% for tutorial in etiqueta.tutorial %}
+                        {{ tutorial.titulo }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+                <a href="{% url 'editar_etiqueta_api' etiqueta.id %}" class="btn btn-primary mt-3">Editar</a>
+                <a href="{% url 'actualizar_nombre_etiqueta_api' etiqueta.id %}" class="btn btn-primary mt-3">Editar Nombre</a>
+                <form action="{% url 'etiqueta_eliminar' etiqueta.id %}" method="post" onsubmit="return eliminar();">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Eliminar</button> 
+                </form>
             </div>
         </div>
     </div>

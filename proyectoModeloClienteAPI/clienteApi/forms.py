@@ -9,6 +9,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .helper import helper
 
 
 class BusquedaUsuarioForm(forms.Form):
@@ -144,7 +145,6 @@ class Create_usuario(forms.Form):
         })
     )
     es_activo = forms.BooleanField(
-        required=True,
         widget=forms.CheckboxInput(attrs={
             'class': 'form-check-input',
         })
@@ -156,3 +156,127 @@ class Create_usuario(forms.Form):
             'type': 'date',
         })
     )
+
+class NombreUsuarioForm(forms.Form):
+    nombre = forms.CharField(
+        required= True,
+        max_length=20,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Nombre...',
+        })
+    )
+
+class TituloTutorialForm(forms.Form):
+    titulo = forms.CharField(
+        required= True,
+        max_length=20,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'titulo...',
+        })
+    )
+
+class EtiquetaNombreForm(forms.Form):
+    nombre = forms.CharField(
+        required= True,
+        max_length=20,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Nombre...',
+        })
+    )
+
+class Create_tutorial(forms.Form):
+    titulo = forms.CharField(
+        required= True,
+        max_length=20,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'titulo...',
+        })
+    )
+    contenido = forms.CharField(
+        required= True,
+        max_length=50,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contenido...',
+        })
+    )
+    fecha_Creacion = forms.DateField(
+        required=True,
+        widget=forms.DateInput(attrs={
+            'class': 'form-control',
+            'type': 'date',
+        })
+    )
+    visitas = forms.IntegerField(
+        required=True,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ej: 1'
+        })
+    )
+
+    valoracion = forms.DecimalField(
+        max_digits=3, 
+        decimal_places=1, 
+        required=True,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ej: 5.0'
+        })
+    )
+
+    def __init__(self, *args, **kwargs):
+        
+        super(Create_tutorial, self).__init__(*args, **kwargs)
+
+        usuarios_disponibles = helper.obtener_usuario_selec()
+        self.fields['usuario'] = forms.ChoiceField(
+            choices= usuarios_disponibles, 
+            widget= forms.Select,
+            required= True,
+        )
+
+class Create_etiqueta(forms.Form):
+    nombre = forms.CharField(
+        required=True,
+        max_length=20,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Nombre de la etiqueta...',
+        })
+    )
+    color = forms.CharField(
+        required=True,
+        max_length=20,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Color de la etiqueta...',
+        })
+    )
+    publica = forms.BooleanField(
+         widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
+        })
+    )
+    descripcion = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'placeholder': 'Descripción...',
+        })
+    )
+
+    def __init__(self, *args, **kwargs):
+        
+        super(Create_etiqueta, self).__init__(*args, **kwargs)
+
+        tutoriales_disponibles = helper.obtener_tutorial_selec()
+        self.fields['tutorial'] = forms.ChoiceField(
+            choices= tutoriales_disponibles, 
+            widget= forms.Select,
+            required= True,
+        )

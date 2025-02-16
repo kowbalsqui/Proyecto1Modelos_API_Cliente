@@ -22,8 +22,21 @@ urlpatterns = [
     path('Comentario/busqueda_comentario_avanzado_api', views.busqueda_comentario_avanzado_api, name = 'busqueda_comentario_avanzado_api'),
     #URL POST
     path('Usuario/crear_usuario_api', views.crear_usuario_api, name = 'crear_usuario_api'),
+    path('Tutorial/crear_tutorial_api', views.crear_tutorial_api, name = 'crear_tutorial_api'),
+    path('Etiqueta/crear_etiqueta_api', views.crear_etiqueta_api, name= 'crear_etiqueta_api'),
     #URL PUT
     path('Usuario/editar_usuario_api/<int:usuario_id>', views.editar_usuario_api, name = 'editar_usuario_api'),
     path('Usuario/mostrar/<int:usuario_id>', views.usuario_obtener, name='usuario_mostrar'),
-
+    path('Tutorial/editar_tutorial_api/<int:tutorial_id>', views.editar_tutorial_api, name = 'editar_tutorial_api'),
+    path('Tutorial/mostrar/<int:tutorial_id>', views.tutorial_obtener, name='tutorial_mostrar'),
+    path('Etiqueta/editar_etiqueta_api/<int:etiqueta_id>', views.editar_etiqueta_api, name = 'editar_etiqueta_api'),
+    path('Etiqueta/mostrar/<int:etiqueta_id>', views.etiqueta_obtener, name='etiqueta_mostrar'),
+    #URL PATCH
+    path('Usuario/editar/nombre/<int:usuario_id>', views.actualizar_nombre_usuario_api, name = 'actualizar_nombre_usuario_api'),
+    path('Tutorial/editar/titulo/<int:tutorial_id>', views.actualizar_titulo_tutorial_api, name= 'actualizar_titulo_tutorial_api'),
+    path('Etiqueta/editar/nombre/<int:etiqueta_id>', views.actualizar_nombre_etiqueta_api, name= 'actualizar_nombre_etiqueta_api'),
+    #URL DELETE
+    path('Usuario/eliminar/<int:usuario_id>',views.eliminar_usuario_api,name='usuario_eliminar'),
+    path('Tutorial/eliminar/<int:tutorial_id>', views.eliminar_tutorial_api, name = 'tutorial_eliminar'),
+    path('Etiqueta/eliminar/<int:etiqueta_id>', views.eliminar_etiqueta_api, name = 'etiqueta_eliminar'),
 ]

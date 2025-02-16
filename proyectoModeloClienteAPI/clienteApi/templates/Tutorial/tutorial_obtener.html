@@ -1,0 +1,22 @@
+{% extends "Padre.html" %}
+
+{% block contenido %}
+
+<h1 class="display-3">Detalles del Tutorial</h1>
+
+<div class="row">
+    <div class="col-sm-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ tutorial.titulo }}</h5>
+                <p class="card-text"><strong>Contenido:</strong> {{ tutorial.contenido }}</p>
+                <p class="card-text"><strong>Fecha de Creacion:</strong> {{ tutorial.fecha_Creacion }}</p>
+                <p class="card-text"><strong>Vistas</strong> {{ tutorial.visitas }}</p>
+                <p class="card-text"><strong>Valoración:</strong> {{ tutorial.valoracion }}</p>
+                <p class="card-text"><strong>Usuario:</strong> {{ tutorial.usuario.nombre }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
