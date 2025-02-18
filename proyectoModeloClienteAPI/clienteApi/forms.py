@@ -280,3 +280,49 @@ class Create_etiqueta(forms.Form):
             widget= forms.Select,
             required= True,
         )
+
+class Create_cursos(forms.Form):
+    nombre = forms.CharField(
+        required=True,
+        max_length=20,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Nombre del curso...',
+        })
+    )
+    horas = forms.IntegerField(
+        required=True,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ej: 10h'
+        })
+    )
+
+    precio = forms.DecimalField(
+        max_digits=3, 
+        decimal_places=1, 
+        required=True,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Precio:'
+        })
+    )
+    
+    descripcion = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'placeholder': 'Descripción...',
+        })
+    )
+
+    def __init__(self, *args, **kwargs):
+        
+        super(Create_cursos, self).__init__(*args, **kwargs)
+        
+        usuarios_disponibles = helper.obtener_usuario_selec()
+        self.fields['usuario'] = forms.ChoiceField(
+            choices= usuarios_disponibles, 
+            widget= forms.Select,
+            required= True,
+        )

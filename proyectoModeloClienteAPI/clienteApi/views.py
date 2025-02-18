@@ -490,6 +490,66 @@ def crear_etiqueta_api(request):
             formulario = Create_etiqueta(None)
     return render(request, 'Etiquetas/crear_etiqueta_api.html',{"formulario":formulario})
 
+import json
+import requests
+import os
+from django.shortcuts import render, redirect
+from django.forms import Form
+from requests.exceptions import HTTPError
+from .forms import Create_cursos
+
+def crear_cursos_api(request):
+    profesor = os.getenv('TEACHER_USER')
+    print(request.method)
+    
+    if request.method == 'POST':
+        try:
+            formulario = Create_cursos(request.POST)
+            if formulario.is_valid():
+                headers = {
+                    'Authorization': f'Bearer {profesor}',
+                    'Content-Type': 'application/json'
+                }
+                
+                # ✅ Asegura que `usuarios` se envíe como una lista de IDs
+                datos = formulario.cleaned_data.copy()
+                datos['usuario'] = request.POST.getlist('usuario')  # Debe coincidir con el campo del serializer
+                
+                # ✅ Usa `json=datos` en lugar de `data=json.dumps(datos)`
+                response = requests.post(
+                    'http://127.0.0.1:8092/api/v1/curso/crear_cursos_api',
+                    headers=headers,
+                    json=datos  # 🔹 La forma correcta de enviar JSON
+                )
+
+                if response.status_code == requests.codes.ok:
+                    return redirect('lista_cursos_api')
+                else:
+                    print(response.status_code)
+                    response.raise_for_status()
+
+            else:
+                print("Errores del formulario:", formulario.errors)
+
+        except HTTPError as http_err:
+            print(f'Hubo un error en la petición: {http_err}')
+            if response.status_code == 400:
+                errores = response.json()
+                for field, error_list in errores.items():
+                    for error in error_list:
+                        formulario.add_error(field, error)
+            else:
+                formulario.add_error(None, f'Error en la petición: {http_err}')
+                
+        except Exception as e:
+            formulario.add_error(None, f'Error inesperado: {e}')
+
+    else:
+        formulario = Create_cursos(None)
+
+    return render(request, 'Cursos/crear_cursos_api.html', {'formulario': formulario})
+
+
 # PUT en la API
 
 def usuario_obtener(request, usuario_id):
