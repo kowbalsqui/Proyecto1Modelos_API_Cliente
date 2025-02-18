@@ -1,0 +1,27 @@
+{% extends "Padre.html" %}
+
+{% block cabecera %}
+    <h1 class="text-center text-primary my-4">Actualizacion de un Tutorial desde Cliente API</h1>
+{% endblock %}
+
+{% block contenido %}
+<div class="card shadow p-4">
+    <h2 class="text-secondary mb-4">Actualizacion de un Tutorial</h2>
+
+    <form method="POST" action="{% url 'actualizar_titulo_tutorial_api' tutorial_id%}" class="mb-4">
+        {% csrf_token %}
+        
+        <!-- Campo de Título -->
+        <div class="form-group mb-3">
+            {{ formulario.titulo.label_tag }}
+            {{ formulario.titulo }}
+            {% for error in formulario.titulo.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+        <!-- Botón de búsqueda -->
+        <button type="submit" class="btn btn-primary w-100">Crear</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "Padre.html" %}
+
+{% block cabecera %}
+    <h1 class="text-center text-primary my-4">Actualizacion de una Etiqueta desde Cliente API</h1>
+{% endblock %}
+
+{% block contenido %}
+<div class="card shadow p-4">
+    <h2 class="text-secondary mb-4">Actualizacion de una Etiqueta</h2>
+
+    <form method="POST" action="{% url 'editar_etiqueta_api' etiqueta_id %}" class="mb-4">
+        {% csrf_token %}
+        
+        <!-- Campo de Nombre -->
+        <div class="form-group mb-3">
+            {{ formulario.nombre.label_tag }}
+            {{ formulario.nombre }}
+            {% for error in formulario.nombre.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+        <!-- Campo de Color -->
+        <div class="form-group mb-3">
+            {{ formulario.color.label_tag }}
+            {{ formulario.color }}
+            {% for error in formulario.color.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+        <!-- Campo de Publica -->
+        <div class="form-group mb-3 form-check">
+            {{ formulario.publica.label_tag }}
+            {{ formulario.publica }}
+            {% for error in formulario.publica.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+        <!-- Campo de Descripción -->
+        <div class="form-group mb-3">
+            {{ formulario.descripcion.label_tag }}
+            {{ formulario.descripcion }}
+            {% for error in formulario.descripcion.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+        <!-- Campo de Tutorial -->
+        <div class="form-group mb-3">
+            {{ formulario.tutorial.label_tag }}
+            {{ formulario.tutorial }}
+            {% for error in formulario.tutorial.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+        <!-- Botón de creación -->
+        <button type="submit" class="btn btn-primary w-100">Crear Etiqueta</button>
+    </form>
+</div>
+{% endblock %}

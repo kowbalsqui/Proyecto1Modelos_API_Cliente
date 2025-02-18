@@ -1,0 +1,72 @@
+{% extends "Padre.html" %}
+
+{% block cabecera %}
+    <h1 class="text-center text-primary my-4">Creacion de un Tutorial desde Cliente API</h1>
+{% endblock %}
+
+{% block contenido %}
+<div class="card shadow p-4">
+    <h2 class="text-secondary mb-4">Creacion de un Tutorial</h2>
+
+    <form method="POST" action="{% url 'crear_tutorial_api' %}" class="mb-4">
+        {% csrf_token %}
+        
+        <!-- Campo de Título -->
+        <div class="form-group mb-3">
+            {{ formulario.titulo.label_tag }}
+            {{ formulario.titulo }}
+            {% for error in formulario.titulo.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+        <!-- Campo de Visitas -->
+        <div class="form-group mb-3">
+            {{ formulario.contenido.label_tag }}
+            {{ formulario.contenido }}
+            {% for error in formulario.contenido.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+        <!-- Campo de Valoración -->
+        <div class="form-group mb-3">
+            {{ formulario.fecha_Creacion.label_tag }}
+            {{ formulario.fecha_Creacion }}
+            {% for error in formulario.fecha_Creacion.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+         <!-- Campo de Valoración -->
+         <div class="form-group mb-3">
+            {{ formulario.visitas.label_tag }}
+            {{ formulario.visitas }}
+            {% for error in formulario.visitas.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+         <!-- Campo de Valoración -->
+         <div class="form-group mb-3">
+            {{ formulario.valoracion.label_tag }}
+            {{ formulario.valoracion }}
+            {% for error in formulario.valoracion.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+        <!-- Campo de Valoración -->
+        <div class="form-group mb-3">
+            {{ formulario.usuario.label_tag }}
+            {{ formulario.usuario }}
+            {% for error in formulario.usuario.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+        <!-- Botón de búsqueda -->
+        <button type="submit" class="btn btn-primary w-100">Crear</button>
+    </form>
+</div>
+{% endblock %}

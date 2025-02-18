@@ -1,5 +1,17 @@
 {% extends "Padre.html" %}
+
 {% block contenido %}
+
+<!-- mensaje de confirmiacion -->
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
 
 <h1 class="display-3">Lista de Usuarios</h1>
 
@@ -13,6 +25,19 @@
                 <p class="card-text"><strong>Fecha de Registro:</strong> {{ usuario.fecha_Registro }}</p>
                 <p class="card-text"><strong>Activo?:</strong> {{ usuario.es_activo }}</p>
                 <p class="card-text"><strong>Puntuación:</strong> {{ usuario.puntuacion }}</p>
+
+                <!-- Botón para Editar -->
+                <a href="{% url 'editar_usuario_api' usuario.id %}" class="btn btn-primary mt-3">
+                    Editar
+                </a>
+                <!-- Botón para Editar -->
+                <a href="{% url 'actualizar_nombre_usuario_api' usuario.id %}" class="btn btn-primary mt-3">
+                    Editar Nombre
+                </a>
+                <form action="{% url 'usuario_eliminar' usuario.id %}" method="post" onsubmit="return eliminar();">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Eliminar</button> 
+                </form>
             </div>
         </div>
     </div>
