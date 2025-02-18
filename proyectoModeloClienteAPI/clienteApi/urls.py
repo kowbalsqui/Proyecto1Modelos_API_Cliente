@@ -24,6 +24,7 @@ urlpatterns = [
     path('Usuario/crear_usuario_api', views.crear_usuario_api, name = 'crear_usuario_api'),
     path('Tutorial/crear_tutorial_api', views.crear_tutorial_api, name = 'crear_tutorial_api'),
     path('Etiqueta/crear_etiqueta_api', views.crear_etiqueta_api, name= 'crear_etiqueta_api'),
+    path('Cursos/crear_curso_api', views.crear_cursos_api, name= 'crear_cursos_api'),
     #URL PUT
     path('Usuario/editar_usuario_api/<int:usuario_id>', views.editar_usuario_api, name = 'editar_usuario_api'),
     path('Usuario/mostrar/<int:usuario_id>', views.usuario_obtener, name='usuario_mostrar'),

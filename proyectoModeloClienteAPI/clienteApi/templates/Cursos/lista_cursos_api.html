@@ -1,0 +1,26 @@
+{% extends "Padre.html" %}
+{% block contenido %}
+
+<h1 class="display-3">Lista de Cursos</h1>
+
+<div class="row">
+    {% for curso in cursos_mostrar %}
+    <div class="col-sm-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ curso.nombre }}</h5>
+                <p class="card-text"><strong>Descripcion:</strong> {{ curso.descripcion }}</p>
+                <p class="card-text"><strong>Horas :</strong> {{ curso.horas }}</p>
+                <p class="card-text"><strong>Precio:</strong> {{ curso.precio }}</p>
+                <p class="card-text"><strong>Usuario:</strong> {{ curso.usuario.nombre }}</p>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <h3 class="text-center">Lo sentimos mucho, no hay Cursos disponibles</h3>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

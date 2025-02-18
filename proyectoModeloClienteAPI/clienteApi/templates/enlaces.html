@@ -10,14 +10,15 @@
   <div class="col-md-8 offset-md-2">
 
     <!-- Sección de Búsquedas -->
-    <h2 class="text-center text-info mt-4 mb-3">Búsquedas</h2>
+    <h2 class="text-center text-info mt-4 mb-3">Lista</h2>
     <ul class="list-group">
       <li class="list-group-item"><a href="{% url 'listar_tutoriales_api' %}" class="text-decoration-none">Lista tutoriales api(Token de Profesor)</a></li>
       <li class="list-group-item"><a href="{% url 'listar_tutoriales_apiEstudiante' %}" class="text-decoration-none">Lista tutoriales api(Token de estudiante)</a></li>
       <li class="list-group-item"><a href="{% url 'listar_tutoriales_apiAdmin' %}" class="text-decoration-none">Lista tutoriales api(Token de Admin)</a></li>
       <li class="list-group-item"><a href="{% url 'listar_usuarios_api' %}" class="text-decoration-none">Lista usuarios api</a></li>
       <li class="list-group-item"><a href="{% url 'listar_categoria_api' %}" class="text-decoration-none">Lista categorias api</a></li>
-      <li class="list-group-item"><a href="{% url 'lista_etiquetas_api' %}" class="text-decoration-none">Lista etiquetas api</a></li>
+      <li class="list-group-item"><a href="{% url 'lista_cursos_api' %}" class="text-decoration-none">Lista cursos api</a></li>
+
     </ul>
 
     <!-- Separador -->
@@ -51,6 +52,7 @@
       <li class="list-group-item"><a href="{% url 'crear_usuario_api' %}" class="text-decoration-none">Crear Usuarios desde la api</a></li>
       <li class="list-group-item"><a href="{% url 'crear_tutorial_api' %}" class="text-decoration-none">Crear Tutoriales desde la api</a></li>
       <li class="list-group-item"><a href="{% url 'crear_etiqueta_api' %}" class="text-decoration-none">Crear Etiquetas desde la api</a></li>
+      <li class="list-group-item"><a href="{% url 'crear_cursos_api' %}" class="text-decoration-none">Crear Cursos desde la api</a></li>
     </ul>
 
 </div>
