@@ -27,7 +27,7 @@ def tutorial_lista_apiProfesor(request):
     profesor = os.getenv('TEACHER_USER')
     headers_Profesor = {'Authorization': f'Bearer {profesor}'}
     # Obtenemos todos los tutoriales de la api primero
-    response = requests.get('http://127.0.0.1:8092/api/v1/tutorial', headers=headers_Profesor)
+    response = requests.get('http://potito.pythonanywhere.com/api/v1/tutorial', headers=headers_Profesor)
     # Transformamos la respuesta en JSON
     tutoriales = response.json()
     return render(request, 'Tutorial/lista_tutorial_api.html', {
@@ -69,7 +69,7 @@ def usuario_lista_api(request):
     # Le damos el permiso de autorizacion
     headers_Profesor = {'Authorization': f'Bearer {profesor}'}
     # Obtenemos todos los usuarios de la api
-    response = requests.get('http://127.0.0.1:8092/api/v1/usuario', headers=headers_Profesor)
+    response = requests.get('http://potito.pythonanywhere.com/api/v1/usuario', headers=headers_Profesor)
     # Transformamos la respuesta en JSON
     usuarios = response.json()
     return render(request, 'Usuario/lista_usuario_api.html', {
@@ -79,7 +79,7 @@ def usuario_lista_api(request):
 def cursos_lista_api(request):
     profesor = os.getenv('TEACHER_USER')
     headers = {'Authorization': f'Bearer {profesor}'}
-    response = requests.get('http://127.0.0.1:8092/api/v1/cursos', headers=headers)
+    response = requests.get('http://potito.pythonanywhere.com/api/v1/cursos', headers=headers)
     cursos = response.json()
     return render(request, 'Cursos/lista_cursos_api.html', {
         'cursos_mostrar': cursos
@@ -88,7 +88,7 @@ def cursos_lista_api(request):
 def categoria_lista_api(request):
     profesor = os.getenv('TEACHER_USER')
     headers = {'Authorization': f'Bearer {profesor}'}
-    response = requests.get('http://127.0.0.1:8092/api/v1/categoria', headers=headers)
+    response = requests.get('http://potito.pythonanywhere.com/api/v1/categoria', headers=headers)
     categorias = response.json()
     return render(request, 'Categorias/lista_categorias_api.html', {
         'categorias_mostrar': categorias
@@ -111,7 +111,7 @@ def etiquetas_lista_api(request):
     profesor = os.getenv('TEACHER_USER')
     headers = {'Authorization': f'Bearer {profesor}'}
     
-    response = requests.get('http://127.0.0.1:8092/api/v1/etiqueta', headers=headers)
+    response = requests.get('http://potito.pythonanywhere.com/api/v1/etiqueta', headers=headers)
     
     etiquetas = parse_response(response)  # Usa la función dentro de la vista
 
@@ -380,7 +380,7 @@ def crear_usuario_api (request):
             }
             datos = formulario.data.copy()
             response = requests .post(
-                'http://127.0.0.1:8092/api/v1/usuario/crear_usuario_api',
+                'http://potito.pythonanywhere.com/api/v1/usuario/crear_usuario_api',
                 headers= headers,
                 data = json.dumps(datos)
             )
@@ -421,7 +421,7 @@ def crear_tutorial_api(request):
             datos = formulario.data.copy()
             datos['usuarios'] = request.POST.getlist('usuarios')
             response = requests .post(
-                'http://127.0.0.1:8092/api/v1/tutorial/crear_tutorial_api',
+                'http://potito.pythonanywhere.com/api/v1/tutorial/crear_tutorial_api',
                 headers= headers,
                 data = json.dumps(datos)
             )
@@ -462,12 +462,12 @@ def crear_etiqueta_api(request):
             datos = formulario.data.copy()
             datos['tutorial'] = request.POST.getlist('tutorial')
             response = requests .post(
-                'http://127.0.0.1:8092/api/v1/etiqueta/crear_etiqueta_api',
+                'http://potito.pythonanywhere.com/api/v1/etiqueta/crear_etiqueta_api',
                 headers= headers,
                 data = json.dumps(datos)
             )
             if(response.status_code == requests.codes.ok):
-                return redirect('listar_etiquetas_api')
+                return redirect('lista_etiquetas_api')
             else: 
                 print(response.status_code)
                 response.raise_for_status()
@@ -490,64 +490,47 @@ def crear_etiqueta_api(request):
             formulario = Create_etiqueta(None)
     return render(request, 'Etiquetas/crear_etiqueta_api.html',{"formulario":formulario})
 
-import json
-import requests
-import os
-from django.shortcuts import render, redirect
-from django.forms import Form
-from requests.exceptions import HTTPError
-from .forms import Create_cursos
-
 def crear_cursos_api(request):
     profesor = os.getenv('TEACHER_USER')
     print(request.method)
-    
-    if request.method == 'POST':
+    if (request.method == 'POST'):
         try:
             formulario = Create_cursos(request.POST)
-            if formulario.is_valid():
-                headers = {
-                    'Authorization': f'Bearer {profesor}',
-                    'Content-Type': 'application/json'
-                }
-                
-                # ✅ Asegura que `usuarios` se envíe como una lista de IDs
-                datos = formulario.cleaned_data.copy()
-                datos['usuario'] = request.POST.getlist('usuario')  # Debe coincidir con el campo del serializer
-                
-                # ✅ Usa `json=datos` en lugar de `data=json.dumps(datos)`
-                response = requests.post(
-                    'http://127.0.0.1:8092/api/v1/curso/crear_cursos_api',
-                    headers=headers,
-                    json=datos  # 🔹 La forma correcta de enviar JSON
-                )
+            headers = {
+                'Authorization': f'Bearer {profesor}',
+                'Content-Type': 'application/json'
+            }
+            datos = formulario.data.copy()
+            datos['usuario'] = request.POST.getlist('usuario')
+            response = requests .post(
+                'http://potito.pythonanywhere.com/api/v1/curso/crear_cursos_api',
+                headers= headers,
+                data = json.dumps(datos)
+            )
+            if response.status_code == requests.codes.ok or response.status_code == 201:
+                return redirect('lista_cursos_api')
 
-                if response.status_code == requests.codes.ok:
-                    return redirect('lista_cursos_api')
-                else:
-                    print(response.status_code)
-                    response.raise_for_status()
-
-            else:
-                print("Errores del formulario:", formulario.errors)
-
+            else: 
+                print(response.status_code)
+                response.raise_for_status()
         except HTTPError as http_err:
             print(f'Hubo un error en la petición: {http_err}')
-            if response.status_code == 400:
+            if(response.status_code == 400):
                 errores = response.json()
-                for field, error_list in errores.items():
-                    for error in error_list:
-                        formulario.add_error(field, error)
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request, 
+                            'Cursos/crear_cursos_api.html',
+                            {"formulario":formulario})
             else:
-                formulario.add_error(None, f'Error en la petición: {http_err}')
-                
-        except Exception as e:
-            formulario.add_error(None, f'Error inesperado: {e}')
-
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+            
     else:
-        formulario = Create_cursos(None)
-
-    return render(request, 'Cursos/crear_cursos_api.html', {'formulario': formulario})
+            formulario = Create_cursos(None)
+    return render(request, 'Cursos/crear_cursos_api.html',{"formulario":formulario})
 
 
 # PUT en la API
@@ -645,7 +628,7 @@ def editar_etiqueta_api(request, etiqueta_id):
                                 }
     )
     if(request.method == "POST"):
-        formulario = Create_tutorial(request.POST)
+        formulario = Create_etiqueta(request.POST)
         datos = request.POST.copy()
         datos['tutoriales'] = request.POST.getlist('tutoriales')
         api_cliente = cliente_api("PUT", f"etiqueta/editar/{etiqueta_id}", datos)
@@ -658,6 +641,41 @@ def editar_etiqueta_api(request, etiqueta_id):
             else:
                 return tratar_errores(request,api_cliente.codigoRespuesta)
     return render(request, 'Etiquetas/actualizar.html',{"formulario":formulario,"etiqueta":etiqueta, "etiqueta_id":etiqueta_id})
+
+def curso_obtener(request, curso_id):
+    curso = helper.obtener_curso(curso_id)
+    return render(request, 'Cursos/curso_obtener.html', {'curso': curso})
+
+def editar_curso_api(request, curso_id):
+    datosFormulario = None
+    
+    if request.method == "POST":
+        datosFormulario = request.POST
+    
+    curso = helper.obtener_curso(curso_id)
+    formulario = Create_cursos(datosFormulario,
+                                initial={
+                                    'nombre': curso['nombre'],
+                                    'descripcion': curso['descripcion'],
+                                    'horas': curso['horas'],
+                                    'precio': curso['precio'],
+                                    'usuario': [usuario['id'] for usuario in curso.get('usuarios', [])],
+                                }
+    )
+    if(request.method == "POST"):
+        formulario = Create_cursos(request.POST)
+        datos = request.POST.copy()
+        datos['usuario'] = request.POST.getlist('usuario')
+        api_cliente = cliente_api("PUT", f"curso/editar/{curso_id}", datos)
+        api_cliente.realizar_peticion_api()
+        if(api_cliente.es_respuesta_correcta()):
+            return redirect("curso_mostrar",curso_id=curso_id)
+        else:
+            if(api_cliente.es_error_validacion_datos()):
+                api_cliente.incluir_errores_formulario(formulario)
+            else:
+                return tratar_errores(request,api_cliente.codigoRespuesta)
+    return render(request, 'Cursos/actualizar.html',{"formulario":formulario,"curso":curso, "curso_id":curso_id})
 
 # PATCH en la API
 
@@ -678,7 +696,7 @@ def actualizar_nombre_usuario_api(request, usuario_id):
             headers = crear_cabezera()
             datos = request.POST.copy()
             response = requests.patch(
-                'http://127.0.0.1:8092/api/v1/usuario/actualizar/nombre/'+str(usuario_id),
+                'http://potito.pythonanywhere.com/api/v1/usuario/actualizar/nombre/'+str(usuario_id),
                 headers=headers,
                 data=json.dumps(datos)
             )
@@ -721,7 +739,7 @@ def actualizar_titulo_tutorial_api (request, tutorial_id):
             headers = crear_cabezera()
             datos = request.POST.copy()
             response = requests.patch(
-                'http://127.0.0.1:8092/api/v1/tutorial/actualizar/titulo/'+str(tutorial_id),
+                'http://potito.pythonanywhere.com/api/v1/tutorial/actualizar/titulo/'+str(tutorial_id),
                 headers=headers,
                 data=json.dumps(datos)
             )
@@ -763,7 +781,7 @@ def actualizar_nombre_etiqueta_api (request, etiqueta_id):
             headers = crear_cabezera()
             datos = request.POST.copy()
             response = requests.patch(
-                'http://127.0.0.1:8092/api/v1/etiqueta/actualizar/nombre/'+str(etiqueta_id),
+                'http://potito.pythonanywhere.com/api/v1/etiqueta/actualizar/nombre/'+str(etiqueta_id),
                 headers=headers,
                 data=json.dumps(datos)
             )
@@ -788,13 +806,55 @@ def actualizar_nombre_etiqueta_api (request, etiqueta_id):
             return mi_error_500(request)
     return render(request, 'Etiquetas/actualizaNombre.html',{"formulario":formulario,"etiqueta":etiqueta, 'etiqueta_id': etiqueta_id})
 
+def actualizar_nombre_curso_api (request, curso_id):
+    datosFormulario = None
+
+    if request.method == "POST":
+        datosFormulario = request.POST
+
+    curso = helper.obtener_curso(curso_id)
+    formulario = CursoNombreForm(datosFormulario,
+                                   initial={
+                                       'nombre': curso['nombre']
+                                   })
+    if (request.method == 'POST'):
+        try:
+            formulario = CursoNombreForm(request.POST)
+            headers = crear_cabezera()
+            datos = request.POST.copy()
+            response = requests.patch(
+                'http://potito.pythonanywhere.com/api/v1/curso/actualizar/nombre/'+str(curso_id),
+                headers=headers,
+                data=json.dumps(datos)
+            )
+            if (response.status_code == requests.codes.ok):
+                return redirect('curso_mostrar', curso_id=curso_id)
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un error en la petición: {http_err}')
+            if(response.status_code == 400):
+                errores = response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request, 
+                            'Cursos/actualizaNombre.html',
+                            {"formulario":formulario,"curso":curso})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    return render(request, 'Cursos/actualizaNombre.html',{"formulario":formulario,"curso":curso, 'curso_id': curso_id})
+
 # DELETED en la API
 
 def eliminar_usuario_api(request, usuario_id):
     try:
         headers = crear_cabezera()
         response = requests.delete(
-            'http://127.0.0.1:8092/api/v1/usuario/eliminar/'+str(usuario_id),
+            'http://potito.pythonanywhere.com/api/v1/usuario/eliminar/'+str(usuario_id),
             headers = headers
         )
         if (response.status_code == requests.codes.ok):
@@ -811,7 +871,7 @@ def eliminar_tutorial_api(request, tutorial_id):
     try:
         headers = crear_cabezera()
         response = requests.delete(
-            'http://127.0.0.1:8092/api/v1/tutorial/eliminar/'+str(tutorial_id),
+            'http://potito.pythonanywhere.com/api/v1/tutorial/eliminar/'+str(tutorial_id),
             headers = headers
         )
         if (response.status_code == requests.codes.ok):
@@ -828,11 +888,28 @@ def eliminar_etiqueta_api(request, etiqueta_id):
     try:
         headers = crear_cabezera()
         response = requests.delete(
-            'http://127.0.0.1:8092/api/v1/etiqueta/eliminar/'+str(etiqueta_id),
+            'http://potito.pythonanywhere.com/api/v1/etiqueta/eliminar/'+str(etiqueta_id),
             headers = headers
         )
         if (response.status_code == requests.codes.ok):
             return redirect('lista_etiquetas_api')
+        else:
+            print(response.status_code)
+            response.raise_for_status()
+    except Exception as err:
+        print(f'Ocurrió un error: {err}')
+        return mi_error_500(request)
+    return redirect('lista_etiquetas_api')
+
+def eliminar_curso_api(request, curso_id):
+    try:
+        headers = crear_cabezera()
+        response = requests.delete(
+            'http://potito.pythonanywhere.com/api/v1/curso/eliminar/'+str(curso_id),
+            headers = headers
+        )
+        if (response.status_code == requests.codes.ok):
+            return redirect('lista_cursos_api')
         else:
             print(response.status_code)
             response.raise_for_status()

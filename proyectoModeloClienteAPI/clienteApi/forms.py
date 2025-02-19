@@ -187,6 +187,16 @@ class EtiquetaNombreForm(forms.Form):
         })
     )
 
+class CursoNombreForm(forms.Form):
+    nombre = forms.CharField(
+        required= True,
+        max_length=20,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Nombre...',
+        })
+    )
+
 class Create_tutorial(forms.Form):
     titulo = forms.CharField(
         required= True,
@@ -299,13 +309,10 @@ class Create_cursos(forms.Form):
     )
 
     precio = forms.DecimalField(
-        max_digits=3, 
-        decimal_places=1, 
-        required=True,
-        widget=forms.NumberInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Precio:'
-        })
+        max_digits=5, 
+        decimal_places=2,  # ⬅️ Permite 2 decimales sin validación extra.
+        min_value=0,  # ⬅️ Solo evita valores negativos.
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Precio...'})
     )
     
     descripcion = forms.CharField(
@@ -326,3 +333,4 @@ class Create_cursos(forms.Form):
             widget= forms.Select,
             required= True,
         )
+        

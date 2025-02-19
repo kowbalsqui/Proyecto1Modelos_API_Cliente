@@ -32,12 +32,16 @@ urlpatterns = [
     path('Tutorial/mostrar/<int:tutorial_id>', views.tutorial_obtener, name='tutorial_mostrar'),
     path('Etiqueta/editar_etiqueta_api/<int:etiqueta_id>', views.editar_etiqueta_api, name = 'editar_etiqueta_api'),
     path('Etiqueta/mostrar/<int:etiqueta_id>', views.etiqueta_obtener, name='etiqueta_mostrar'),
+    path('Cursos/editar_curso_api/<int:curso_id>', views.editar_curso_api, name = 'editar_curso_api'),
+    path('Cursos/mostrar/<int:curso_id>', views.curso_obtener, name='curso_mostrar'),
     #URL PATCH
     path('Usuario/editar/nombre/<int:usuario_id>', views.actualizar_nombre_usuario_api, name = 'actualizar_nombre_usuario_api'),
     path('Tutorial/editar/titulo/<int:tutorial_id>', views.actualizar_titulo_tutorial_api, name= 'actualizar_titulo_tutorial_api'),
     path('Etiqueta/editar/nombre/<int:etiqueta_id>', views.actualizar_nombre_etiqueta_api, name= 'actualizar_nombre_etiqueta_api'),
+    path('Cursos/editar/nombre/<int:curso_id>', views.actualizar_nombre_curso_api, name= 'actualizar_nombre_curso_api'),
     #URL DELETE
     path('Usuario/eliminar/<int:usuario_id>',views.eliminar_usuario_api,name='usuario_eliminar'),
     path('Tutorial/eliminar/<int:tutorial_id>', views.eliminar_tutorial_api, name = 'tutorial_eliminar'),
     path('Etiqueta/eliminar/<int:etiqueta_id>', views.eliminar_etiqueta_api, name = 'etiqueta_eliminar'),
+    path('Cursos/eliminar/<int:curso_id>', views.eliminar_curso_api, name = 'curso_eliminar'),
 ]
