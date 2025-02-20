@@ -44,7 +44,8 @@ class cliente_api:
             self.datosEnvio=json.dumps(self.datosEnvio)
     
     def realizar_peticion(self):
-        url = os.getenv('URL')
+        url = os.getenv('URLANYWHERE')
+        url2 = os.getenv('URL')
         try:
             self.respuesta = requests.put(
                     url+self.url,

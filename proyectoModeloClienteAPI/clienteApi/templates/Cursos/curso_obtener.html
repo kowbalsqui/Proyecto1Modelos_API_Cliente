@@ -1,10 +1,10 @@
 {% extends "Padre.html" %}
+
 {% block contenido %}
 
-<h1 class="display-3">Lista de Cursos</h1>
+<h1 class="display-3">Detalles de la Etiqueta</h1>
 
 <div class="row">
-    {% for curso in cursos_mostrar %}
     <div class="col-sm-4 mb-4">
         <div class="card h-100">
             <div class="card-body">
@@ -17,20 +17,9 @@
                         {{ usuario.nombre }}{% if not forloop.last %}, {% endif %}
                     {% endfor %}
                 </p>
-                <a href="{% url 'editar_curso_api' curso.id %}" class="btn btn-primary mt-3">Editar</a>
-                <a href="{% url 'actualizar_nombre_curso_api' curso.id %}" class="btn btn-primary mt-3">Editar Nombre</a>
-                <form action="{% url 'curso_eliminar' curso.id %}" method="post" onsubmit="return eliminar();">
-                    {% csrf_token %}
-                    <button class="btn btn-danger" type="submit">Eliminar</button> 
-                </form>
             </div>
         </div>
     </div>
-    {% empty %}
-    <div class="col-12">
-        <h3 class="text-center">Lo sentimos mucho, no hay Cursos disponibles</h3>
-    </div>
-    {% endfor %}
 </div>
 
 {% endblock %}

@@ -1,0 +1,63 @@
+{% extends "Padre.html" %}
+
+{% block cabecera %}
+    <h1 class="text-center text-primary my-4">Edicion de un Curso desde Cliente API</h1>
+{% endblock %}
+
+{% block contenido %}
+<div class="card shadow p-4">
+    <h2 class="text-secondary mb-4">Edicion de un curso</h2>
+
+    <form method="POST" action="{% url 'editar_curso_api' curso.id %}" class="mb-4">
+        {% csrf_token %}
+        
+        <!-- Campo de Nombre -->
+        <div class="form-group mb-3">
+            {{ formulario.nombre.label_tag }}
+            {{ formulario.nombre }}
+            {% for error in formulario.nombre.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+        <!-- Campo de Color -->
+        <div class="form-group mb-3">
+            {{ formulario.descripcion.label_tag }}
+            {{ formulario.descripcion }}
+            {% for error in formulario.descripcion.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+        <!-- Campo de Publica -->
+        <div class="form-group mb-3 form-check">
+            {{ formulario.horas.label_tag }}
+            {{ formulario.horas }}
+            {% for error in formulario.horas.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+        <!-- Campo de Descripción -->
+        <div class="form-group mb-3">
+            {{ formulario.precio.label_tag }}
+            {{ formulario.precio }}
+            {% for error in formulario.precio.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+        <!-- Campo de Tutorial -->
+        <div class="form-group mb-3">
+            {{ formulario.usuario.label_tag }}
+            {{ formulario.usuario }}
+            {% for error in formulario.usuario.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+
+        <!-- Botón de creación -->
+        <button type="submit" class="btn btn-primary w-100">Crear Curso</button>
+    </form>
+</div>
+{% endblock %}
