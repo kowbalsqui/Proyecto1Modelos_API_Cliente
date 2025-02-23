@@ -4,7 +4,11 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 import urllib.parse
-
+import requests
+import json
+import os
+from dotenv import load_dotenv
+from requests.exceptions import HTTPError
 class helper:
     load_dotenv()
 
@@ -12,7 +16,7 @@ class helper:
         #Obtenemos todos los usuarios
         profesor = os.getenv('TEACHER_USER')
         headers = {'Authorization': f'Bearer {profesor}'}
-        response = requests.get('http://potito.pythonanywhere.com/api/v1/usuario/'+str(id), headers=headers)
+        response = requests.get('http://potito.pythonanywhere.com/api/v1/usuarios/'+str(id), headers=headers)
         usuario = response.json()
         return usuario
     
