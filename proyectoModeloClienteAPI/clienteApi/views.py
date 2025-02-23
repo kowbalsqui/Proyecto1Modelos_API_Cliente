@@ -11,6 +11,8 @@ import json
 from .helper import helper
 from .cliente_api import cliente_api
 import urllib.parse
+from django.contrib import messages
+
 
 # Cargar el archivo .env
 load_dotenv()
@@ -49,7 +51,7 @@ def usuario_lista_api (request):
     #Le damos el permiso de autorizacion
     headers = {'Authorization': 'Bearer G8S54YVURkTo8oS9fp7VF9fVnYQpnU'}
     #Obtenemos todos los usuarios de la api
-    response = requests.get('http://potito.pythonanywhere.com/api/v1/usuario', headers= headers)
+    response = requests.get("http://potito.pythonanywhere.com/api/v1/usuarios/", headers= headers)
     #Transformamos las repuesta
 
 def tutorial_lista_apiEstudiante(request):
@@ -69,7 +71,7 @@ def usuario_lista_api(request):
     # Le damos el permiso de autorizacion
     headers_Profesor = {'Authorization': f'Bearer {profesor}'}
     # Obtenemos todos los usuarios de la api
-    response = requests.get('http://potito.pythonanywhere.com/api/v1/usuario', headers=headers_Profesor)
+    response = requests.get('http://potito.pythonanywhere.com/api/v1/usuarios/', headers=headers_Profesor)
     # Transformamos la respuesta en JSON
     usuarios = response.json()
     return render(request, 'Usuario/lista_usuario_api.html', {
@@ -380,11 +382,13 @@ def crear_usuario_api (request):
             }
             datos = formulario.data.copy()
             response = requests .post(
-                'http://potito.pythonanywhere.com/api/v1/usuario/crear_usuario_api',
+                "http://potito.pythonanywhere.com/api/v1/usuarios/",
                 headers= headers,
                 data = json.dumps(datos)
             )
-            if(response.status_code == requests.codes.ok):
+            if response.status_code in [requests.codes.ok, 201]:
+                print("Usuario Creado")
+                messages.success(request,"Usuario Creado")
                 return redirect('listar_usuarios_api')
             else: 
                 print(response.status_code)
@@ -426,6 +430,8 @@ def crear_tutorial_api(request):
                 data = json.dumps(datos)
             )
             if(response.status_code == requests.codes.ok):
+                print("Tutoriales creado")
+                messages.success(request,"Tutorial Creado")
                 return redirect('listar_tutoriales_api')
             else: 
                 print(response.status_code)
@@ -467,6 +473,8 @@ def crear_etiqueta_api(request):
                 data = json.dumps(datos)
             )
             if(response.status_code == requests.codes.ok):
+                print("Etiqueta creada")
+                messages.success(request,"Etiqueta Creada")
                 return redirect('lista_etiquetas_api')
             else: 
                 print(response.status_code)
@@ -508,6 +516,8 @@ def crear_cursos_api(request):
                 data = json.dumps(datos)
             )
             if response.status_code == requests.codes.ok or response.status_code == 201:
+                print("Curso creado")
+                messages.success(request,"Curso creado")
                 return redirect('lista_cursos_api')
 
             else: 
@@ -558,9 +568,11 @@ def editar_usuario_api(request, usuario_id):
     if(request.method == "POST"):
         formulario = Create_usuario(request.POST)
         datos = request.POST.copy()
-        api_cliente = cliente_api("PUT", f"usuario/editar/{usuario_id}", datos)
+        api_cliente = cliente_api("PUT", f"usuarios/{usuario_id}/", datos)
         api_cliente.realizar_peticion_api()
         if(api_cliente.es_respuesta_correcta()):
+            print("Usuario modificado")
+            messages.success(request,"Usuario modificado")
             return redirect("usuario_mostrar",usuario_id=usuario_id)
         else:
             if(api_cliente.es_error_validacion_datos()):
@@ -598,6 +610,8 @@ def editar_tutorial_api(request, tutorial_id):
         api_cliente = cliente_api("PUT", f"tutorial/editar/{tutorial_id}", datos)
         api_cliente.realizar_peticion_api()
         if(api_cliente.es_respuesta_correcta()):
+            print("Tutorial modificado")
+            messages.success(request,"Tutorial modificado")
             return redirect("tutorial_mostrar", tutorial_id=tutorial_id)
         else:
             if(api_cliente.es_error_validacion_datos()):
@@ -634,6 +648,8 @@ def editar_etiqueta_api(request, etiqueta_id):
         api_cliente = cliente_api("PUT", f"etiqueta/editar/{etiqueta_id}", datos)
         api_cliente.realizar_peticion_api()
         if(api_cliente.es_respuesta_correcta()):
+            print("Etiqueta modificado")
+            messages.success(request,"Etiqueta modificado")
             return redirect("etiqueta_mostrar", etiqueta_id=etiqueta_id)
         else:
             if(api_cliente.es_error_validacion_datos()):
@@ -669,6 +685,8 @@ def editar_curso_api(request, curso_id):
         api_cliente = cliente_api("PUT", f"curso/editar/{curso_id}", datos)
         api_cliente.realizar_peticion_api()
         if(api_cliente.es_respuesta_correcta()):
+            print("Curso modificado")
+            messages.success(request,"Curso modificado")
             return redirect("curso_mostrar",curso_id=curso_id)
         else:
             if(api_cliente.es_error_validacion_datos()):
@@ -696,11 +714,13 @@ def actualizar_nombre_usuario_api(request, usuario_id):
             headers = crear_cabezera()
             datos = request.POST.copy()
             response = requests.patch(
-                'http://potito.pythonanywhere.com/api/v1/usuario/actualizar/nombre/'+str(usuario_id),
+                'http://potito.pythonanywhere.com/api/v1/usuarios/'+str(usuario_id)+"/",
                 headers=headers,
                 data=json.dumps(datos)
             )
             if (response.status_code == requests.codes.ok):
+                print("Usuario modificado")
+                messages.success(request,"Usuario modificado")
                 return redirect('usuario_mostrar', usuario_id=usuario_id)
             else:
                 print(response.status_code)
@@ -744,6 +764,8 @@ def actualizar_titulo_tutorial_api (request, tutorial_id):
                 data=json.dumps(datos)
             )
             if (response.status_code == requests.codes.ok):
+                print("Tutorial modificado")
+                messages.success(request,"Tutorial modificado")
                 return redirect('tutorial_mostrar', tutorial_id=tutorial_id)
             else:
                 print(response.status_code)
@@ -786,6 +808,8 @@ def actualizar_nombre_etiqueta_api (request, etiqueta_id):
                 data=json.dumps(datos)
             )
             if (response.status_code == requests.codes.ok):
+                print("Etiqueta modificado")
+                messages.success(request,"Etiqueta modificado")
                 return redirect('etiqueta_mostrar', etiqueta_id=etiqueta_id)
             else:
                 print(response.status_code)
@@ -828,6 +852,8 @@ def actualizar_nombre_curso_api (request, curso_id):
                 data=json.dumps(datos)
             )
             if (response.status_code == requests.codes.ok):
+                print("Curso modificado")
+                messages.success(request,"Curso modificado")
                 return redirect('curso_mostrar', curso_id=curso_id)
             else:
                 print(response.status_code)
@@ -854,18 +880,25 @@ def eliminar_usuario_api(request, usuario_id):
     try:
         headers = crear_cabezera()
         response = requests.delete(
-            'http://potito.pythonanywhere.com/api/v1/usuario/eliminar/'+str(usuario_id),
-            headers = headers
+            f'http://potito.pythonanywhere.com/api/v1/usuarios/{usuario_id}/',  # 🔹 Usa f-string para mejorar legibilidad
+            headers=headers
         )
-        if (response.status_code == requests.codes.ok):
+        
+        # ✅ DRF devuelve 204 para DELETE exitoso, así que revisamos ambos (200 y 204)
+        if response.status_code in [requests.codes.ok, 204]:  
+            print("Usuario eliminado")
+            messages.success(request,"Usuario elimindo")
             return redirect('listar_usuarios_api')
         else:
-            print(response.status_code)
+            print(f"Error {response.status_code}: {response.text}")  # 🔹 Más detalles del error
             response.raise_for_status()
-    except Exception as err:
-        print(f'Ocurrió un error: {err}')
+    
+    except requests.RequestException as err:
+        print(f'Ocurrió un error en la solicitud: {err}')
         return mi_error_500(request)
+    
     return redirect('listar_usuarios_api')
+
 
 def eliminar_tutorial_api(request, tutorial_id):
     try:
@@ -875,6 +908,8 @@ def eliminar_tutorial_api(request, tutorial_id):
             headers = headers
         )
         if (response.status_code == requests.codes.ok):
+            print("Tutorial eliminado")
+            messages.success(request,"Tutorial eliminado")
             return redirect('listar_tutoriales_api')
         else:
             print(response.status_code)
@@ -892,6 +927,8 @@ def eliminar_etiqueta_api(request, etiqueta_id):
             headers = headers
         )
         if (response.status_code == requests.codes.ok):
+            print("Etiqueta eliminado")
+            messages.success(request,"Etiqueta eliminada")
             return redirect('lista_etiquetas_api')
         else:
             print(response.status_code)
@@ -909,6 +946,8 @@ def eliminar_curso_api(request, curso_id):
             headers = headers
         )
         if (response.status_code == requests.codes.ok):
+            print("Curso Eliminado")
+            messages.success(request, "Curso eliminado")
             return redirect('lista_cursos_api')
         else:
             print(response.status_code)
