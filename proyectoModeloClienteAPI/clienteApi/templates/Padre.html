@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
   <head>
     {% load django_bootstrap5 %}
@@ -18,10 +18,10 @@
       <div class="container">
         <a class="navbar-brand" href="#">
           DjangoProjects
-          {% if user.is_authenticated %}
-              <p>Fecha de inicio de sesión: </p>
+          {% if usuario_sesion %}
+              <p class="text-dark">Fecha de inicio de sesión: </p>
           {% else %}
-              <p>No has iniciado sesión</p>
+              <p class="text-dark">No has iniciado sesión</p>
           {% endif %}
         </a>
 
@@ -42,17 +42,30 @@
 
           <!-- Información del usuario y botón de logout -->
           <div class="d-flex align-items-center ms-auto">
-            {% if user.is_authenticated %}
+            {% if usuario_sesion %}
               <!-- Información del usuario alineada a la derecha -->
+              <div class="text-dark text-end me-3">
+                <p class="mb-0"><strong>Bienvenido:</strong> {{ usuario_sesion.nombre }}</p>
+                <p class="mb-0"><strong>Correo:</strong> {{ usuario_sesion.email }}</p>
+                <p class="mb-0"><strong>Rol:</strong> {{ usuario_sesion.rol }}  
+                  {% if usuario_sesion.rol == 2 %}
+                    Profesor
+                  {% elif usuario_sesion.rol == 3 %}
+                    Estudiante
+                  {% else %}
+                    Administrador
+                  {% endif %}
+                </p>
+              </div>
               <!-- Botón de cerrar sesión -->
-              <form method="post" style="display: inline;">
+              <form method="post" action="{% url 'logout' %}" style="display: inline;">
                 {% csrf_token %}
                 <button class="btn btn-outline-danger" type="submit">Cerrar sesión</button>
               </form>
             {% else %}
               <!-- Botones de login y registro -->
-              <a class="btn btn-outline-warning me-2">Iniciar sesión</a>
-              <a class="btn btn-outline-primary">Registrarse</a>
+              <a class="btn btn-outline-warning me-2" href="{% url 'login' %}">Iniciar sesión</a>
+              <a class="btn btn-outline-primary" href="{% url 'registrar_usuario' %}">Registrarse</a>
             {% endif %}
           </div>
         </div>
