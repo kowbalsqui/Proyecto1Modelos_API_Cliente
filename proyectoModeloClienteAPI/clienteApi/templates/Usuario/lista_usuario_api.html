@@ -1,51 +1,45 @@
 {% extends "Padre.html" %}
-
 {% block contenido %}
 
-<!-- mensaje de confirmiacion -->
-
+<!-- Mensajes de confirmación -->
 {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    {% endfor %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
 {% endif %}
 
 <h1 class="display-3">Lista de Usuarios</h1>
 
 <div class="row">
-    {% for usuario in usuarios_mostrar %}
+  {% for usuario in usuarios_mostrar %}
     <div class="col-sm-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">{{ usuario.nombre }}</h5>
-                <p class="card-text"><strong>Email:</strong> {{ usuario.email }}</p>
-                <p class="card-text"><strong>Fecha de Registro:</strong> {{ usuario.fecha_Registro }}</p>
-                <p class="card-text"><strong>Activo?:</strong> {{ usuario.es_activo }}</p>
-                <p class="card-text"><strong>Puntuación:</strong> {{ usuario.puntuacion }}</p>
-
-                <!-- Botón para Editar -->
-                <a href="{% url 'editar_usuario_api' usuario.id %}" class="btn btn-primary mt-3">
-                    Editar
-                </a>
-                <!-- Botón para Editar -->
-                <a href="{% url 'actualizar_nombre_usuario_api' usuario.id %}" class="btn btn-primary mt-3">
-                    Editar Nombre
-                </a>
-                <form action="{% url 'usuario_eliminar' usuario.id %}" method="post" onsubmit="return eliminar();">
-                    {% csrf_token %}
-                    <button class="btn btn-danger" type="submit">Eliminar</button> 
-                </form>
-            </div>
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{ usuario.nombre }}</h5>
+          <p class="card-text"><strong>Email:</strong> {{ usuario.email }}</p>
+          <p class="card-text"><strong>Fecha de Registro:</strong> {{ usuario.fecha_Registro }}</p>
+          <p class="card-text"><strong>Activo?:</strong> {{ usuario.es_activo|yesno:"Sí,No" }}</p>
+          <p class="card-text"><strong>Puntuación:</strong> {{ usuario.puntuacion }}</p>
+          
+          {% if request.session.usuario.rol == 2 %}
+            <a href="{% url 'editar_usuario_api' usuario.id %}" class="btn btn-primary mt-3">Editar</a>
+            <a href="{% url 'actualizar_nombre_usuario_api' usuario.id %}" class="btn btn-primary mt-3">Editar Nombre</a>
+            <form action="{% url 'usuario_eliminar' usuario.id %}" method="post" onsubmit="return eliminar();">
+              {% csrf_token %}
+              <button class="btn btn-danger" type="submit">Eliminar</button>
+            </form>
+          {% endif %}
         </div>
+      </div>
     </div>
-    {% empty %}
+  {% empty %}
     <div class="col-12">
-        <h3 class="text-center">Lo sentimos mucho, no hay usuarios disponibles</h3>
+      <h3 class="text-center">Lo sentimos mucho, no hay usuarios disponibles</h3>
     </div>
-    {% endfor %}
+  {% endfor %}
 </div>
 
 {% endblock %}

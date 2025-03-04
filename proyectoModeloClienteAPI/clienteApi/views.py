@@ -220,7 +220,7 @@ def busqueda_usuario_avanzado_api(request):
                 print("Datos enviados en params:", formulario.cleaned_data)  # Depuración
                 
                 response = requests.get(
-                    f'{url}usuario/busqueda_avanzada_usuario', 
+                    'http://127.0.0.1:8092/api/v1/usuario/busqueda_avanzada_usuario', 
                     headers=headers,
                     params=formulario.cleaned_data
                 )

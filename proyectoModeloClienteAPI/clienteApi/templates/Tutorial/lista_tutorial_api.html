@@ -1,45 +1,46 @@
 {% extends "Padre.html" %}
 {% block contenido %}
 
-<!-- mensaje de confirmiacion -->
-
+<!-- Mensajes de confirmación -->
 {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    {% endfor %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
 {% endif %}
 
 <h1 class="display-3">Lista de Tutoriales</h1>
 
 <div class="row">
-    {% for tutorial in tutoriales_mostrar %}
+  {% for tutorial in tutoriales_mostrar %}
     <div class="col-sm-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">{{ tutorial.titulo }}</h5>
-                <p class="card-text"><strong>Contenido:</strong> {{ tutorial.contenido }}</p>
-                <p class="card-text"><strong>Fecha de Creación:</strong> {{ tutorial.fecha_Creacion }}</p>
-                <p class="card-text"><strong>Visitas:</strong> {{ tutorial.visitas }}</p>
-                <p class="card-text"><strong>Valoración:</strong> {{ tutorial.valoracion }}</p>
-                <p class="card-text"><strong>Usuario:</strong> {{ tutorial.usuario.nombre }}</p>
-                
-                <a href="{% url 'editar_tutorial_api' tutorial.id %}" class="btn btn-primary mt-3">Editar</a>
-                <a href="{% url 'actualizar_titulo_tutorial_api' tutorial.id %}" class="btn btn-primary mt-3">Editar Titulo</a>
-                <form action="{% url 'tutorial_eliminar' tutorial.id %}" method="post" onsubmit="return eliminar();">
-                    {% csrf_token %}
-                    <button class="btn btn-danger" type="submit">Eliminar</button> 
-                </form>
-            </div>
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{ tutorial.titulo }}</h5>
+          <p class="card-text"><strong>Contenido:</strong> {{ tutorial.contenido }}</p>
+          <p class="card-text"><strong>Fecha de Creación:</strong> {{ tutorial.fecha_Creacion }}</p>
+          <p class="card-text"><strong>Visitas:</strong> {{ tutorial.visitas }}</p>
+          <p class="card-text"><strong>Valoración:</strong> {{ tutorial.valoracion }}</p>
+          <p class="card-text"><strong>Usuario:</strong> {{ tutorial.usuario.nombre }}</p>
+
+          {% if request.session.usuario.rol == 2 %}
+            <a href="{% url 'editar_tutorial_api' tutorial.id %}" class="btn btn-primary mt-3">Editar</a>
+            <a href="{% url 'actualizar_titulo_tutorial_api' tutorial.id %}" class="btn btn-secondary mt-3">Editar Título</a>
+            <form action="{% url 'tutorial_eliminar' tutorial.id %}" method="post" onsubmit="return eliminar();">
+              {% csrf_token %}
+              <button class="btn btn-danger mt-3" type="submit">Eliminar</button> 
+            </form>
+          {% endif %}
         </div>
+      </div>
     </div>
-    {% empty %}
+  {% empty %}
     <div class="col-12">
-        <h3 class="text-center">Lo sentimos mucho, no hay tutoriales disponibles</h3>
+      <h3 class="text-center">Lo sentimos mucho, no hay tutoriales disponibles</h3>
     </div>
-    {% endfor %}
+  {% endfor %}
 </div>
 
 {% endblock %}
