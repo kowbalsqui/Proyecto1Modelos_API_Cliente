@@ -220,7 +220,7 @@ def busqueda_usuario_avanzado_api(request):
                 print("Datos enviados en params:", formulario.cleaned_data)  # Depuración
                 
                 response = requests.get(
-                    f'{url}usuario/busqueda_avanzada_usuario', 
+                    'http://127.0.0.1:8092/api/v1/usuario/busqueda_avanzada_usuario', 
                     headers=headers,
                     params=formulario.cleaned_data
                 )
@@ -1280,3 +1280,10 @@ def logout(request):
     request.session.pop("usuario", None)  # Borra la info del usuario logueado
     request.session.flush()  # Elimina toda la sesión
     return redirect("login")  # Redirige a la página de login
+
+#CORS
+
+def mi_vista(request):
+    token = request.session.get("token")
+    print("Token de la sesion es " + token)
+    return render(request, 'mi_template.html', {'token': token})

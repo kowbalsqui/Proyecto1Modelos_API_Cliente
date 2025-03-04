@@ -53,4 +53,6 @@ urlpatterns = [
     #POSTS
     path('Tutorial/crear_tutorial_cliente_user/', views.crear_tutorial_cliente, name='crear_tutorial_cliente_user'),
     path('Curso/crear_curso_cliente_user/', views.crear_curso_cliente, name='crear_curso_cliente_user'),
+    #CORS
+    path('test_cors/', views.mi_vista, name='test_cors'),
 ]

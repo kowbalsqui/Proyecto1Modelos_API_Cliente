@@ -28,12 +28,14 @@
                         {{ usuario.nombre }}{% if not forloop.last %}, {% endif %}
                     {% endfor %}
                 </p>
+                {% if request.session.usuario.rol == 2 %}
                 <a href="{% url 'editar_curso_api' curso.id %}" class="btn btn-primary mt-3">Editar</a>
                 <a href="{% url 'actualizar_nombre_curso_api' curso.id %}" class="btn btn-primary mt-3">Editar Nombre</a>
                 <form action="{% url 'curso_eliminar' curso.id %}" method="post" onsubmit="return eliminar();">
                     {% csrf_token %}
                     <button class="btn btn-danger" type="submit">Eliminar</button> 
                 </form>
+                {% endif %}
             </div>
         </div>
     </div>

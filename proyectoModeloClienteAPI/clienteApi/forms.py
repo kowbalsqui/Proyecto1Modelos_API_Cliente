@@ -31,11 +31,11 @@ class BusquedaUsuarioAvanzadoForm(forms.Form):
             'class': 'form-check-input',
         })
     )
-    fecha_Registro = forms.DateField(
+    nombre = forms.CharField(
         required=False,
-        widget=forms.DateInput(attrs={
+        widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'type': 'date',
+            'placeholder': 'Ej: Nombre..'
         })
     )
 class BusquedaTutorialAvanzadoForm(forms.Form):
