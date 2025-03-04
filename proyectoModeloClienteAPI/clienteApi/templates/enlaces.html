@@ -6,6 +6,9 @@
 {% endblock %}
 
 {% block contenido %}
+
+{% if request.session.usuario.rol == 2 %}
+
 <div class="row">
   <div class="col-md-8 offset-md-2">
 
@@ -19,6 +22,8 @@
       <!--<li class="list-group-item"><a href="{% url 'listar_categoria_api' %}" class="text-decoration-none">Lista categorias api</a></li> -->
       <li class="list-group-item"><a href="{% url 'lista_etiquetas_api' %}" class="text-decoration-none">Lista etiquetas api</a></li>
       <li class="list-group-item"><a href="{% url 'lista_cursos_api' %}" class="text-decoration-none">Lista cursos api</a></li>
+
+      <li class="list-group-item"><a href="{% url 'perfil_usuario' %}" class="text-decoration-none">Ver Perfil</a></li>
 
     </ul>
 
@@ -54,8 +59,49 @@
       <li class="list-group-item"><a href="{% url 'crear_tutorial_api' %}" class="text-decoration-none">Crear Tutoriales desde la api</a></li>
       <li class="list-group-item"><a href="{% url 'crear_etiqueta_api' %}" class="text-decoration-none">Crear Etiquetas desde la api</a></li>
       <li class="list-group-item"><a href="{% url 'crear_cursos_api' %}" class="text-decoration-none">Crear Cursos desde la api</a></li>
+
+      <li class="list-group-item"><a href="{% url 'crear_tutorial_cliente_user' %}" class="text-decoration-none">Crear Tutorial com Cliente</a></li>
+      <li class="list-group-item"><a href="{% url 'crear_curso_cliente_user' %}" class="text-decoration-none">Crear Cursos con cliente</a></li>
     </ul>
 
 </div>
+
+{% endif %} 
+
+{% if request.session.usuario.rol == 3 %}
+
+<div class="row">
+  <div class="col-md-8 offset-md-2">
+
+    <!-- Sección de Búsquedas -->
+    <h2 class="text-center text-info mt-4 mb-3">Lista</h2>
+    <ul class="list-group">
+      <li class="list-group-item"><a href="{% url 'listar_tutoriales_api' %}" class="text-decoration-none">Lista tutoriales api(Token de Profesor)</a></li>
+      <li class="list-group-item"><a href="{% url 'listar_tutoriales_apiEstudiante' %}" class="text-decoration-none">Lista tutoriales api(Token de estudiante)</a></li>
+      <li class="list-group-item"><a href="{% url 'listar_tutoriales_apiAdmin' %}" class="text-decoration-none">Lista tutoriales api(Token de Admin)</a></li>
+      <li class="list-group-item"><a href="{% url 'listar_usuarios_api' %}" class="text-decoration-none">Lista usuarios api</a></li>
+      <!--<li class="list-group-item"><a href="{% url 'listar_categoria_api' %}" class="text-decoration-none">Lista categorias api</a></li> -->
+      <li class="list-group-item"><a href="{% url 'lista_etiquetas_api' %}" class="text-decoration-none">Lista etiquetas api</a></li>
+      <li class="list-group-item"><a href="{% url 'lista_cursos_api' %}" class="text-decoration-none">Lista cursos api</a></li>
+      
+      <li class="list-group-item"><a href="{% url 'perfil_usuario' %}" class="text-decoration-none">Ver Perfil</a></li>
+
+    </ul>
+    
+
+    <!-- Separador -->
+    <hr class="my-4">
+
+    <!-- Sección de Busquedas Avanzadas -->
+    <h2 class="text-center text-success mt-4 mb-3">Busqueda Avanzadas</h2>
+    <ul class="list-group">
+      <li class="list-group-item"><a href="{% url 'busqueda_tutorial_avanzado_api' %}" class="text-decoration-none">Buscar Tutorial avanzado api</a></li>
+      <li class="list-group-item"><a href="{% url 'busqueda_comentario_avanzado_api' %}" class="text-decoration-none">Buscar Comentario avanzado api</a></li>
+    </ul>
+
+</div>
+
+{% endif %} 
+
 {% endblock %}
 

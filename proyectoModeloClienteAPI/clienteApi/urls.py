@@ -44,4 +44,13 @@ urlpatterns = [
     path('Tutorial/eliminar/<int:tutorial_id>', views.eliminar_tutorial_api, name = 'tutorial_eliminar'),
     path('Etiqueta/eliminar/<int:etiqueta_id>', views.eliminar_etiqueta_api, name = 'etiqueta_eliminar'),
     path('Cursos/eliminar/<int:curso_id>', views.eliminar_curso_api, name = 'curso_eliminar'),
+    #URL GESTION DE USUARIOS
+    path('registrar', views.registrar_usuario, name='registrar_usuario'),
+    path('login', views.login, name= 'login'),
+    path('logout', views.logout, name= 'logout'),
+    #GETS
+    path('Usuario/perfil', views.perfil_usuario, name = 'perfil_usuario'),
+    #POSTS
+    path('Tutorial/crear_tutorial_cliente_user/', views.crear_tutorial_cliente, name='crear_tutorial_cliente_user'),
+    path('Curso/crear_curso_cliente_user/', views.crear_curso_cliente, name='crear_curso_cliente_user'),
 ]

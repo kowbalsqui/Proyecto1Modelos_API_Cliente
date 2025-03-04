@@ -7,12 +7,13 @@ from pathlib import Path
 from dotenv import load_dotenv
 import json
 from requests.exceptions import HTTPError
-
+from django.http import JsonResponse
 
 
 
 class cliente_api:
 
+    
     load_dotenv()
     profesor = os.getenv('TEACHER_USER')
     
@@ -33,9 +34,13 @@ class cliente_api:
         self.datosEnvio = datosEnvio
         self.formatoRespuesta = formatoRespuesta
     
-    def crear_cabecera(self):
+    def crear_cabecera(self, request):
+        token = request.session.get("token")  # 🔥 Obtener el token del usuario logueado
+        
+        if not token:
+            return JsonResponse({"error": "No estás autenticado"}, status=401)
         profesor = os.getenv('TEACHER_USER')    
-        self.headers["Authorization"] = f'Bearer {profesor}'
+        self.headers["Authorization"] = f'Bearer {token}'
         if(self.metodo == "PUT" or self.metodo == "PATCH" or self.metodo == "POST"):
             self.headers["Content-Type"] = "application/json"
     
@@ -44,8 +49,8 @@ class cliente_api:
             self.datosEnvio=json.dumps(self.datosEnvio)
     
     def realizar_peticion(self):
-        url = os.getenv('URLANYWHERE')
-        url2 = os.getenv('URL')
+        url = os.getenv('URL')
+        url2 = os.getenv('URLANYWHERE')
         try:
             self.respuesta = requests.put(
                     url+self.url,
@@ -62,9 +67,9 @@ class cliente_api:
         if(self.formatoRespuesta == "json"):
             self.datosRespuesta = self.respuesta.json()
          
-    def realizar_peticion_api(self):
+    def realizar_peticion_api(self, request):
         try:
-            self.crear_cabecera()
+            self.crear_cabecera(request)
             self.transformar_datos_envio()    
             self.realizar_peticion()
             self.tratar_respuesta()
