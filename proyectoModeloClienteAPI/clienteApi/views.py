@@ -1280,3 +1280,10 @@ def logout(request):
     request.session.pop("usuario", None)  # Borra la info del usuario logueado
     request.session.flush()  # Elimina toda la sesión
     return redirect("login")  # Redirige a la página de login
+
+#CORS
+
+def mi_vista(request):
+    token = request.session.get("token")
+    print("Token de la sesion es " + token)
+    return render(request, 'mi_template.html', {'token': token})

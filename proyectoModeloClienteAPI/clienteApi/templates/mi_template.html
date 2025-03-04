@@ -1,0 +1,29 @@
+{% extends "Padre.html" %}
+{% load static %}
+
+{% block cabecera %}
+  <h1 class="text-center text-primary my-4">Prueba CORS con Token</h1>
+{% endblock %}
+
+{% block contenido %}
+  <p class="text-center text-secondary">Haz clic en el botón para consultar el usuario a través de CORS.</p>
+
+  <!-- Botón para ejecutar la petición CORS -->
+  <button id="btnCORS" class="btn btn-primary">Consultar Usuario</button>
+
+  <!-- Contenedor donde se mostrará la respuesta -->
+  <div id="resultadoUser" class="mt-4"></div>
+
+  <script>
+      // Inyectamos el token desde el contexto
+      var token = "{{ token }}";
+      console.log("Token inyectado:", token);
+  </script>
+  <script src="{% static 'javaScript/testCors.js' %}"></script>
+  <script>
+      // Asociamos el evento al botón para ejecutar la función con el token
+      document.getElementById("btnCORS").addEventListener("click", function() {
+          consultaCorsApi(token);
+      });
+  </script>
+{% endblock %}

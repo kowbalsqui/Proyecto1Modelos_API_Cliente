@@ -1,4 +1,5 @@
 {% extends "Padre.html" %}
+{% load static %}
 
 {% block cabecera %}
 <h1 class="text-center text-primary my-4">Menú Principal</h1>
@@ -26,6 +27,19 @@
       <li class="list-group-item"><a href="{% url 'perfil_usuario' %}" class="text-decoration-none">Ver Perfil</a></li>
 
     </ul>
+
+
+
+    <!-- Separador -->
+    <hr class="my-4">
+
+    <!-- Sección de Busquedas Avanzadas -->
+    <h2 class="text-center text-success mt-4 mb-3">CORS</h2>
+    <!-- Incluir el archivo JavaScript que hace la petición CORS -->
+    <li class="list-group-item"><a href="{% url 'test_cors' %}" class="text-decoration-none">Cors con JS</a></li>
+
+
+
 
     <!-- Separador -->
     <hr class="my-4">
@@ -87,6 +101,15 @@
       <li class="list-group-item"><a href="{% url 'perfil_usuario' %}" class="text-decoration-none">Ver Perfil</a></li>
 
     </ul>
+
+
+    <!-- Separador -->
+    <hr class="my-4">
+
+    <!-- Sección de Busquedas Avanzadas -->
+    <h2 class="text-center text-success mt-4 mb-3">CORS</h2>
+    <!-- Incluir el archivo JavaScript que hace la petición CORS -->
+      <script src="{% static 'js/testCors.js' %}"></script>
     
 
     <!-- Separador -->
