@@ -1,3 +1,8 @@
+COMANDO DOKCER: 
+
+docker run -d -p 8090:8090 --name mi_cliente_container mi_cliente_image
+
+
 Este es un tutorial para poder acceder a la aplicación de Tutoriales:
 
 
